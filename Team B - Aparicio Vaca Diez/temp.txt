@@ -1,4 +1,6 @@
-
+Actin = True
+ActomyosinActivity = True
+Akt = False
 
 Actin* = Arp2/3 or ROCK
 ActomyosinActivity* = Actin and Myosin
