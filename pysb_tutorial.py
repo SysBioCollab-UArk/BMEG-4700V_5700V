@@ -29,15 +29,17 @@ Observable('ES_complex', E(b=ANY))
 Observable('Product', X(state='P'))
 Observable('Better_be_zero', X(b=ANY, state='P'))
 
-# Simulation commands
-tspan = np.linspace(0, 50, 501)
-sim = ScipyOdeSimulator(model, tspan, verbose=True)
-output = sim.run()
+if __name__ == '__main__':
 
-for obs in model.observables:
-    plt.plot(tspan, output.observables[obs.name], lw=2, label=obs.name)
-plt.xlabel('time')
-plt.ylabel('concentration')
-plt.legend(loc=0)
+    # Simulation commands
+    tspan = np.linspace(0, 50, 501)
+    sim = ScipyOdeSimulator(model, tspan, verbose=True)
+    output = sim.run()
 
-plt.show()
+    for obs in model.observables:
+        plt.plot(tspan, output.observables[obs.name], lw=2, label=obs.name)
+    plt.xlabel('time')
+    plt.ylabel('concentration')
+    plt.legend(loc=0)
+
+    plt.show()
