@@ -1,6 +1,51 @@
-Actin = True
-ActomyosinActivity = True
-Akt = False
+#Initial states
+Actin* = 0
+ActomyosinActivity* = 0
+Akt* = 0
+AngII* = 0
+Arp2/3* = 0
+AT1R* = 0
+AT2R* = 0
+Ca* = 0
+Cdc42* = 0
+Col1* = 0
+Col1mRNA* = 0
+Col3* = 0
+Col3mRNA* = 0
+ERK* = 0
+ET1* = 0
+ETAR* = 0
+ETBR* = 0
+FAK* = 0
+JNK* = 0
+latentTGFB1* = 0
+MLCK = 0
+MMP2* = 0
+MMP9* = 0
+mTOR* = 0
+mTORC1* = 0
+mTORC2* = 0
+Myosin* = 0
+NO* = 0
+p38* = 0
+p70S6K* = 0
+PDGF* = 0
+PDGFR* = 0
+PI3K* = 0
+pSmad2/3* = 0
+RhoA* = 0
+ROCK* = 0
+Smad4* = 0
+Smad7* = 0
+SMCproliferation = 0
+TGFB1 = 0
+TGFBR1* = 0
+TGFBR2* = 0
+TIMP* = 0
+TSP1 = 0
+
+
+#Reactions
 
 Actin* = Arp2/3 or ROCK
 ActomyosinActivity* = Actin and Myosin
