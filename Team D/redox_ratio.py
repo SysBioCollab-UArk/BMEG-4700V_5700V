@@ -52,6 +52,11 @@ Observable("NADH_Ox_bound", NADH(b=1) % Ox(b=1))
 Observable("NAD_plus_free", NAD_plus(b=None))
 Observable("NAD_plus_Ox_bound", NAD_plus(b=1) % Ox(b=1))
 
+# Additional observables for generalized kinetics
+Observable("NADH_Ox_complex", NADH_Ox(b=None))
+Observable("NAD_plus_Ox_complex", NAD_plus_Ox(b=None))
+
+
 # Simulation setup
 tspan = np.linspace(0, 1, 101)
 sim = ScipyOdeSimulator(model, tspan, verbose=True)
