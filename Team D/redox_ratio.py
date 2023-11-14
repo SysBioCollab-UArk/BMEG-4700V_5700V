@@ -34,7 +34,6 @@ Parameter("km2", 1)
 Parameter("r_plus_oxi", .01)
 Parameter("r_minus_oxi", 1)
 
-
 # Reaction rules
 # NADH binding to Ox (reversible)
 Rule("NADH_binds_Ox", NADH(b=None) + Ox(b=None) | NADH(b=1) % Ox(b=1), kp1, km1)
@@ -69,3 +68,29 @@ plt.xlabel("Time")
 plt.ylabel("Concentration")
 plt.legend(loc=0)
 plt.show()
+
+# Additional Monomers for effective oxidase and reductase
+Monomer("Eff_Ox", ['b'])
+Monomer("Eff_Red", ['b'])
+Monomer("NADH_Eff_Ox", ['b'])  # NADH-bound effective oxidase
+Monomer("NAD_plus_Eff_Ox", ['b'])  # NAD+-bound effective oxidase
+
+# Initial conditions for effective enzymes
+Parameter("Eff_Ox_init", 50)  # Example initial condition
+Parameter("Eff_Red_init", 50)  # Example initial condition
+Initial(Eff_Ox(b=None), Eff_Ox_init)
+Initial(Eff_Red(b=None), Eff_Red_init)
+
+# Additional rates for coarse-grained model
+Parameter("k_eff_bind", .01)  # Example rate
+Parameter("k_eff_unbind", 1)  # Example rate
+
+# Coarse-grained rules
+Rule("NADH_binds_Eff_Ox", NADH(b=None) + Eff_Ox(b=None) | NADH_Eff_Ox(b=None), k_eff_bind, k_eff_unbind)
+Rule("NAD_plus_binds_Eff_Ox", NAD_plus(b=None) + Eff_Ox(b=None) | NAD_plus_Eff_Ox(b=None), k_eff_bind, k_eff_unbind)
+
+# Update observables for coarse-grained model
+Observable("Eff_Ox_free", Eff_Ox(b=None))
+Observable("Eff_Red_free", Eff_Red(b=None))
+Observable("NADH_Eff_Ox_bound", NADH_Eff_Ox(b=None))
+Observable("NAD_plus_Eff_Ox_bound", NAD_plus_Eff_Ox(b=None))
