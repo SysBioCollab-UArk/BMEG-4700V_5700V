@@ -70,22 +70,24 @@ if __name__ == '__main__':
     print('- starting simulation with REPEAT=%s, STEPS=%s' % (REPEAT, STEPS))
 
     # a single overexpressed node
-    mtext = boolean2.modify_states(text=text, turnon=['Stimuli'])
-    avgs = run(text=mtext, repeat=REPEAT, nodes=NODES, steps=STEPS)
+    # mtext = boolean2.modify_states(text=text, turnon=['Actin'])
+    # avgs = run(text=mtext, repeat=REPEAT, nodes=NODES, steps=STEPS)
+
+    avgs = run(text=text, repeat=REPEAT, nodes=NODES, steps=STEPS)
     data.append(avgs)
 
-    # multiple overexrpessed nodes
-    mtext = boolean2.modify_states(text=text, turnon=['Stimuli', 'Mcl1'])
-    avgs = run(text=mtext, repeat=REPEAT, nodes=NODES, steps=STEPS)
-    data.append(avgs)
-
-    mtext = boolean2.modify_states(text=text, turnon=['Stimuli', 'sFas'])
-    avgs = run(text=mtext, repeat=REPEAT, nodes=NODES, steps=STEPS)
-    data.append(avgs)
-
-    mtext = boolean2.modify_states(text=text, turnon=['Stimuli', 'Mcl1', 'sFas'])
-    avgs = run(text=mtext, repeat=REPEAT, nodes=NODES, steps=STEPS)
-    data.append(avgs)
+    # # multiple overexrpessed nodes
+    # mtext = boolean2.modify_states(text=text, turnon=['Stimuli', 'Mcl1'])
+    # avgs = run(text=mtext, repeat=REPEAT, nodes=NODES, steps=STEPS)
+    # data.append(avgs)
+    #
+    # mtext = boolean2.modify_states(text=text, turnon=['Stimuli', 'sFas'])
+    # avgs = run(text=mtext, repeat=REPEAT, nodes=NODES, steps=STEPS)
+    # data.append(avgs)
+    #
+    # mtext = boolean2.modify_states(text=text, turnon=['Stimuli', 'Mcl1', 'sFas'])
+    # avgs = run(text=mtext, repeat=REPEAT, nodes=NODES, steps=STEPS)
+    # data.append(avgs)
 
     fname = 'arterial_model.bin'
     util.bsave(data, fname=fname)
