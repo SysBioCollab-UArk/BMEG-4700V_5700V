@@ -7,9 +7,11 @@ It is also a demonstration on how the collector works
 import boolean2
 from boolean2 import Model, util
 from random import choice
+from matplotlib import pylab
+import matplotlib.pyplot as plt
 
 # ocasionally randomized nodes
-TARGETS = set("PDGFR".split())
+TARGETS = set("Col1".split())
 
 
 def new_getvalue(state, name, p):
@@ -37,14 +39,15 @@ def run(text, nodes, repeat, steps):
 
     for i in range(repeat):
         engine = Model(mode='async', text=text)
-        engine.RULE_GETVALUE = new_getvalue
+        #engine.RULE_GETVALUE = new_getvalue
         # minimalist initial conditions, missing nodes set to false
-        engine.initialize(missing=util.false)
+        engine.initialize()  # missing=util.false)
         engine.iterate(steps=steps)
         coll.collect(states=engine.states, nodes=nodes)
 
     print('- completed')
     avgs = coll.get_averages(normalize=True)
+
     return avgs
 
 
@@ -57,39 +60,42 @@ if __name__ == '__main__':
 
     # this collects the state of all nodes
     NODES = boolean2.all_nodes(text)
-
+    print()
     #
     # raise this for better curves (will take about 2 seconds per repeat)
     # plots were made for REPEAT = 1000, STEPS=150
     #
     REPEAT = 10
     STEPS = 50
-
     data = []
-
     print('- starting simulation with REPEAT=%s, STEPS=%s' % (REPEAT, STEPS))
-
-    # a single overexpressed node
-    # mtext = boolean2.modify_states(text=text, turnon=['Actin'])
-    # avgs = run(text=mtext, repeat=REPEAT, nodes=NODES, steps=STEPS)
-
     avgs = run(text=text, repeat=REPEAT, nodes=NODES, steps=STEPS)
     data.append(avgs)
-
-    # # multiple overexrpessed nodes
-    # mtext = boolean2.modify_states(text=text, turnon=['Stimuli', 'Mcl1'])
-    # avgs = run(text=mtext, repeat=REPEAT, nodes=NODES, steps=STEPS)
-    # data.append(avgs)
-    #
-    # mtext = boolean2.modify_states(text=text, turnon=['Stimuli', 'sFas'])
-    # avgs = run(text=mtext, repeat=REPEAT, nodes=NODES, steps=STEPS)
-    # data.append(avgs)
-    #
-    # mtext = boolean2.modify_states(text=text, turnon=['Stimuli', 'Mcl1', 'sFas'])
-    # avgs = run(text=mtext, repeat=REPEAT, nodes=NODES, steps=STEPS)
-    # data.append(avgs)
-
     fname = 'arterial_model.bin'
     util.bsave(data, fname=fname)
-    print('- data saved into %s' % fname)
+
+
+
+    col3 = avgs['Col3']
+    col1 = avgs['Col1']
+    variable_type = type(col3)
+    print("The type of avgs is:", variable_type)
+    print("The value using square bracket notation", col3[3])
+
+    plt.plot(col3,label='Col 3')
+    plt.plot(col1, label='Col 1')
+
+    # Add legend
+    plt.legend()
+
+    # Add labels to the x and y axes
+    plt.xlabel('Round')
+    plt.ylabel('Count')
+
+    # Add a title to the plot
+    plt.title('Col 1 and 3')
+
+    # Show the plot
+    plt.show()
+
 
