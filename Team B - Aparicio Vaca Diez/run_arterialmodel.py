@@ -5,6 +5,7 @@ It is also a demonstration on how the collector works
 
 """
 import boolean2
+import os
 from boolean2 import Model, util
 from random import choice
 from matplotlib import pylab
@@ -44,6 +45,7 @@ def run(text, nodes, repeat, steps):
         engine.initialize()  # missing=util.false)
         engine.iterate(steps=steps)
         coll.collect(states=engine.states, nodes=nodes)
+        print('repeat no. i=%s' % i)
 
     print('- completed')
     avgs = coll.get_averages(normalize=True)
@@ -53,7 +55,27 @@ def run(text, nodes, repeat, steps):
 
 if __name__ == '__main__':
     # read in the text
-    text = file('temp.txt').read()
+    #text = file('temp.txt').read()
+
+
+    # Get the absolute path of the directory containing the script
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Construct the absolute path to the 'temp.txt' file
+    file_path = os.path.join(script_dir, 'temp.txt')
+
+    # Read the contents of the file
+    try:
+        with open(file_path) as f:
+            text = f.read()
+            print("File Content: {}".format(repr(text)))
+    except IOError as e:
+        print("Error: {}".format(e))
+
+
+
+    #print("Current Working Directory:", os.getcwd())
+
 
     # the nodes of interest that are collected over the run
     # NODES  = 'Apoptosis STAT3 FasL Ras'.split()
@@ -65,7 +87,7 @@ if __name__ == '__main__':
     # raise this for better curves (will take about 2 seconds per repeat)
     # plots were made for REPEAT = 1000, STEPS=150
     #
-    REPEAT = 10
+    REPEAT = 20
     STEPS = 50
     data = []
     print('- starting simulation with REPEAT=%s, STEPS=%s' % (REPEAT, STEPS))
@@ -78,12 +100,15 @@ if __name__ == '__main__':
 
     col3 = avgs['Col3']
     col1 = avgs['Col1']
-    variable_type = type(col3)
-    print("The type of avgs is:", variable_type)
-    print("The value using square bracket notation", col3[3])
+    print('extracted variables for graph')
+    print(col3[1])
+    print(col3[50])
+
 
     plt.plot(col3,label='Col 3')
+    print('plotting col3')
     plt.plot(col1, label='Col 1')
+    print('plotting col1')
 
     # Add legend
     plt.legend()
@@ -98,4 +123,5 @@ if __name__ == '__main__':
     # Show the plot
     plt.show()
 
+    print('finished graph')
 

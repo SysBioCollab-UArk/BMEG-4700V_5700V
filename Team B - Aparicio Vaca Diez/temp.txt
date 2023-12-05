@@ -1,54 +1,66 @@
 #Initial states
+
+#Inputs
+AngIIin = False
+Stress = False
+Wss = False
+Integrins = False
+SACs = False
+
+#Receptors
+AT1R = False
+AT2R = False
+TGFBR1 = False
+TGFBR2 = False
+ETAR = False
+ETBR = False
+PDGFR = False
+
+#Extra cellular in
+AngII = False
+TGFB1 = False
+latentTGFB1 = False
+PDGF = False
+NO = False
+ET1 = False
+
+#Intracellular
 Actin = True
-ActomyosinActivity = True
-Akt = True
-AngII = True
-AngIIin = True
-Arp2_3 = True
-AT1R = True
-AT2R = True
+Akt = False
+Arp2_3 = False
 Ca = True
 Cdc42 = True
-Col1 = False
 Col1mRNA = False
-Col3 = False
 Col3mRNA = False
 ERK = False
-ET1 = True
-ETAR = True
-ETBR = True
 FAK = True
-Integrins = True
 JNK = False
-latentTGFB1 = True
-MLCK = True
+MLCK = False
+mTOR = False
+mTORC1 = False
+mTORC2 = False
+Myosin = False
+p38 = False
+p70S6K = False
+PI3K = False
+pSmad2_3 = False
+RhoA = False
+ROCK = False
+Smad4 = False
+Smad7 = False
+
+#Extracellular Out
 MMP1 = False
 MMP2 = False
 MMP9 = False
-mTOR = True
-mTORC1 = True
-mTORC2 = True
-Myosin = True
-NO = True
-p38 = False
-p70S6K = True
-PDGF = True
-PDGFR = True
-PI3K = True
-pSmad2_3 = True
-RhoA = True
-ROCK = True
-SACs = True
-Smad4 = False
-Smad7 = True
-SMCproliferation = True
-Stress = True
-TGFB1 = True
-TGFBR1 = True
-TGFBR2 = True
 TIMP = False
-TSP1 = True
-Wss = True
+TSP1 = False
+
+#Outputs
+Col1 = False
+Col3 = False
+SMCproliferation = False
+ActomyosinActivity = False
 
 #Reactions
 
