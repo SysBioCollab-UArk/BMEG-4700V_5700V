@@ -81,6 +81,9 @@ Rule('M8_binds_T4', M8(b=None) + T4(b=None) >> M8(b=1) % T4(b=1), Reactay)
 Rule('M9_binds_T4', M9(b=None) + T4(b=None) >> M9(b=1) % T4(b=1), Reactba)
 
 # Observables
+Observable('actC1', C1(b=None, state='A'))
+Observable('decC1', C1(b=None, state='D'))
+
 Observable('unbound_M1', M1(b=None))
 Observable('unbound_M2', M2(b=None))
 Observable('unbound_M8', M8(b=None))
@@ -91,18 +94,17 @@ Observable('unbound_T4', T4(b=None))
 
 
 
-Observable('bound_M1', M1(b=ANY))
-Observable('bound_M2', M2(b=ANY))
-Observable('bound_M8', M8(b=ANY))
-Observable('bound_M9', M9(b=ANY))
+#Observable('bound_M1', M1(b=ANY))
+#Observable('bound_M2', M2(b=ANY))
+#Observable('bound_M8', M8(b=ANY))
+#Observable('bound_M9', M9(b=ANY))
+#
+#
+#Observable('bound_T1', T1(b=ANY))
+#Observable('bound_T2', T2(b=ANY))
+#Observable('bound_T4', T4(b=ANY))
 
 
-Observable('bound_T1', T1(b=ANY))
-Observable('bound_T2', T2(b=ANY))
-Observable('bound_T4', T4(b=ANY))
-
-Observable('decC1', C1(b=None, state='D'))
-Observable('actC1', C1(b=None, state='A'))
 
 # Simulation commands
 tspan = np.linspace(0, 3, 501)
