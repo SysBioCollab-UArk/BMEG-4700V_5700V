@@ -6,6 +6,8 @@
 # 1: B* = not A and C
 # 1: C* = A and not C
 
+
+
 AngIIin* = AngII
 Stress = latentTGFB1
 latentTGFB1 and Stress and Integrins = TGFB1
@@ -17,8 +19,8 @@ TGFB1 = TGFBR2
 TGFB1* = (latentTGFB1 and Stress and Integrins) or (latentTGFB1 and MMP2) or (latentTGFB1 and MMP9) or (latentTGFB1 and TSP1) or TGFBR2
 
 TGFBR2 and not Smad7 = TGFBR1
-TGFBR1 = pSmad2/3
-pSmad2/3 = Smad4
+TGFBR1 = pSmad2_3
+pSmad2_3 = Smad4
 Smad4 = Smad7
 Smad4 = Col1mRNA
 Smad4 = Col3mRNA
@@ -66,7 +68,7 @@ AT1R = p38
 AT1R and not AT2R = ERK
 AT1R = JNK
 AT1R = Ca
-AT1R = pSmad2/3
+AT1R = pSmad2_3
 AT1R = PI3K
 AT2R = NO
 AT1R and not AT2R = RhoA
@@ -88,17 +90,17 @@ FAK = p38
 FAK and not AT2R = ERK
 FAK = JNK
 FAK = Cdc42
-Cdc42 = Arp2/3
-Arp2/3 = Actin
+Cdc42 = Arp2_3
+Arp2_3 = Actin
 
-Actin* = Arp2/3 or ROCK
+Actin* = Arp2_3 or ROCK
 
 ActomyosinActivity* = Actin and Myosin
 Akt* = mTORC2 or PI3K
 
 AngII* = AngIIin or Stress
 
-Arp2/3* = Cdc43
+Arp2_3* = Cdc43
 AT1R* = AngII
 AT2R* = AngII
 Ca* = AT1R or ETAR or (Stress and SACs)
@@ -147,13 +149,13 @@ PI3K* = AT1R or ETAR or PDGFR or TGFBR1
 
 
 
-pSmad2/3* = AT1R or TGFBR1
+pSmad2_3* = AT1R or TGFBR1
 
 RhoA* = (AT1R and not AT2R) or (mTORC2 and not AT2R) or (Stress and Integrins and not AT2R)
 
 
 ROCK* = RhoA
-Smad4* = pSmad2/4
+Smad4* = pSmad2_4
 Smad7* = Smad5
 SMCproliferation = ERK or p70S6K
 

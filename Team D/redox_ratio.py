@@ -4,7 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 Model()
-
 # Monomers (reactive species)
 Monomer("NADH", ['b'])
 Monomer("Ox", ['b'])
@@ -23,7 +22,6 @@ Initial(Ox(b=None), Ox_init)
 Initial(NAD_plus(b=None), NAD_plus_init)
 Initial(NADH_Ox(b=None), NADH_Ox_init)
 Initial(NAD_plus_Ox(b=None), NAD_plus_Ox_init)
-
 
 # Reaction rates
 Parameter("kp1", .01)
@@ -54,7 +52,6 @@ Observable("NAD_plus_Ox_bound", NAD_plus(b=1) % Ox(b=1))
 # Additional observables for generalized kinetics
 Observable("NADH_Ox_complex", NADH_Ox(b=None))
 Observable("NAD_plus_Ox_complex", NAD_plus_Ox(b=None))
-
 
 # Simulation setup
 tspan = np.linspace(0, 1, 101)
