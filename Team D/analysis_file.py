@@ -19,57 +19,45 @@ data_bound_ratio = pd.read_excel('/mnt/data/elife-73808-fig2-data1-v2.xlsx', she
 tspan = np.linspace(0, len(data_nadhf) - 1, len(data_nadhf))
 
 # Function to simulate the model
-def simulate_model(params):
+def simulate_model(params, model, tspan):
     for i, param in enumerate(model.parameters):
         if i < len(params):
             param.value = params[i]
     sim = ScipyOdeSimulator(model, tspan)
     return sim.run()
 
-# Run the simulation with the optimized parameters
-simulation_results = simulate_model(fitted_params)
+# Simulate the model with optimized parameters
+optimized_simulation = simulate_model(fitted_params, model, tspan)
 
-# Analyze and plot results for each condition
+# Plotting results
 conditions = ['oxamate', 'rot', 'oligo', 'fccp']
 for condition in conditions:
-    # Calculate RMSE for NADH free and bound
-    rmse_free = np.sqrt(mean_squared_error(data_nadhf[condition], simulation_results.observables['NADH_free'].all))  # Use .all
-    rmse_bound = np.sqrt(mean_squared_error(data_nadhb[condition], simulation_results.observables['NADH_bound'].all))  # Use .all
-
-    # Print RMSE results
-    print(f"RMSE for NADH Free ({condition}): {rmse_free}")
-    print(f"RMSE for NADH Bound ({condition}): {rmse_bound}")
-
-    # Plotting results
     plt.figure(figsize=(15, 5))
 
-    # NADH Free
+    # Plot for NADH free
     plt.subplot(1, 3, 1)
-    plt.plot(tspan, simulation_results.observables['NADH_free'].all, label='Model - NADH Free')  # Use .all
-    plt.scatter(range(len(data_nadhf)), data_nadhf[condition], color='red', label='Experimental - NADH Free')
-    plt.title(f'NADH Free - {condition}')
-    plt.xlabel('Time')
-    plt.ylabel('Concentration')
+    plt.plot(tspan, optimized_simulation.observables['NADH_free'], label='Model NADH_free')
+    plt.scatter(np.arange(len(data_nadhf)), data_nadhf[condition], color='red', label=f'Exp NADH_free ({condition})')
+    plt.xlabel("Time")
+    plt.ylabel("NADH Free")
     plt.legend()
 
-    # NADH Bound
+    # Plot for NADH bound
     plt.subplot(1, 3, 2)
-    plt.plot(tspan, simulation_results.observables['NADH_bound'].all, label='Model - NADH Bound')  # Use .all
-    plt.scatter(range(len(data_nadhb)), data_nadhb[condition], color='red', label='Experimental - NADH Bound')
-    plt.title(f'NADH Bound - {condition}')
-    plt.xlabel('Time')
-    plt.ylabel('Concentration')
+    plt.plot(tspan, optimized_simulation.observables['NADH_bound'], label='Model NADH_bound')
+    plt.scatter(np.arange(len(data_nadhb)), data_nadhb[condition], color='red', label=f'Exp NADH_bound ({condition})')
+    plt.xlabel("Time")
+    plt.ylabel("NADH Bound")
     plt.legend()
 
-    # NADH Ratio
+    # Plot for NADH ratio
     plt.subplot(1, 3, 3)
-    nadh_ratio = simulation_results.observables['NADH_free'].all / simulation_results.observables['NADH_bound'].all  # Use .all
-    plt.plot(tspan, nadh_ratio, label='Model - NADH Ratio')
-    plt.scatter(range(len(data_bound_ratio)), data_bound_ratio[condition], color='red', label='Experimental - NADH Ratio')
-    plt.title(f'NADH Ratio - {condition}')
-    plt.xlabel('Time')
-    plt.ylabel('Ratio')
+    plt.plot(tspan, optimized_simulation.observables['NADH_ratio'], label='Model NADH_ratio')
+    plt.scatter(np.arange(len(data_bound_ratio)), data_bound_ratio[condition], color='red', label=f'Exp NADH_ratio ({condition})')
+    plt.xlabel("Time")
+    plt.ylabel("NADH Ratio")
     plt.legend()
 
+    plt.suptitle(f"NADH Dynamics under {condition} Condition")
     plt.tight_layout()
     plt.show()

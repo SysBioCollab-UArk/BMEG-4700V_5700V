@@ -4,7 +4,6 @@ from pysb.simulator import ScipyOdeSimulator
 from redox_ratio import model
 import json
 from scipy.optimize import minimize
-
 # Load experimental data from different sheets
 data_nadhf = pd.read_excel('/mnt/data/elife-73808-fig2-data1-v2.xlsx', sheet_name='nadhf')
 data_nadhb = pd.read_excel('/mnt/data/elife-73808-fig2-data1-v2.xlsx', sheet_name='nadhb')
@@ -30,7 +29,7 @@ def cost_function(params, model, tspan, data_nadhf, data_nadhb, data_bound_ratio
     for condition in ['oxamate', 'rot', 'oligo', 'fccp']:
         simulated_nadh_free = simulation_results.observables['NADH_free']
         simulated_nadh_bound = simulation_results.observables['NADH_bound']
-        simulated_nadh_ratio = simulated_nadh_free / simulated_nadh_bound
+        simulated_nadh_ratio = simulation_results.observables['NADH_ratio']
 
         experimental_nadh_free = data_nadhf[condition].values
         experimental_nadh_bound = data_nadhb[condition].values
@@ -45,9 +44,7 @@ def cost_function(params, model, tspan, data_nadhf, data_nadhb, data_bound_ratio
 
 # Initial guess for parameters
 initial_params = [100, 50, 0, 0, 0, 0.01, 1, 0.01, 1, 0.01, 1]  # Adjust as needed
-
-# Parameter bounds
-param_bounds = [(0, None)] * len(initial_params)
+param_bounds = [(0, None), (0, None), ...]  # Complete with appropriate bounds
 
 # Run the optimization
 result = minimize(
@@ -56,6 +53,7 @@ result = minimize(
     args=(model, tspan, data_nadhf, data_nadhb, data_bound_ratio),
     bounds=param_bounds,
     method='L-BFGS-B'
+)
 )
 
 # After optimization
