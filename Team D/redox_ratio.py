@@ -1,93 +1,87 @@
-from pysb import *
+from pysb import Model, Monomer, Parameter, Initial, Rule, Observable, Expression
 from pysb.simulator import ScipyOdeSimulator
 import numpy as np
 import matplotlib.pyplot as plt
 
-Model()
-# Monomers (reactive species)
-Monomer("NADH", ['b'])
-Monomer("Ox", ['b'])
-Monomer("NAD_plus", ['b'])
-Monomer("NADH_Ox", ['b'])  # NADH-oxidase complex
-Monomer("NAD_plus_Ox", ['b'])  # NAD+-oxidase complex
+# Create a new model instance
+model = Model("RedoxModel")
 
-# Initial conditions (concentrations of species at the start)
-Parameter("NADH_init", 100)
+# Define Monomers
+Monomer("NADH", ['state'], {'state': ['free', 'bound']})
+Monomer("Ox", ['b'])  # Oxidase
+Monomer("NAD_plus", ['b'])
+Monomer("Inhibitor", ['type'], {'type': ['oxamate', 'rot', 'oligo', 'fccp']})
+
+# Define Parameters
+Parameter("NADH_free_init", 100)
+Parameter("NADH_bound_init", 50)
 Parameter("Ox_init", 50)
-Parameter("NAD_plus_init", 0)  # Assuming initially there's no NAD+
-Parameter("NADH_Ox_init", 0)  # Assuming initially there's no NADH-Ox complex
-Parameter("NAD_plus_Ox_init", 0)  # Assuming initially there's no NAD+-Ox complex
-Initial(NADH(b=None), NADH_init)
+Parameter("NAD_plus_init", 0)
+Parameter("Inhibitor_init", 0)  # Initial amount of inhibitor
+Parameter("alpha", 0.01)  # Effective rate of NADH oxidation
+Parameter("beta_eq", 1)   # Effective rate of NAD+ reduction
+Parameter("inhibition_factor", 0.5)  # Effect of inhibitors on the reaction rates
+
+# Define Expressions for rates
+Expression("alpha_inhibited", alpha * inhibition_factor)
+Expression("beta_eq_inhibited", beta_eq * inhibition_factor)
+
+# Define Initials
+Initial(NADH(state='free'), NADH_free_init)
+Initial(NADH(state='bound'), NADH_bound_init)
 Initial(Ox(b=None), Ox_init)
 Initial(NAD_plus(b=None), NAD_plus_init)
-Initial(NADH_Ox(b=None), NADH_Ox_init)
-Initial(NAD_plus_Ox(b=None), NAD_plus_Ox_init)
 
-# Reaction rates
-Parameter("kp1", .01)
-Parameter("km1", 1)
-Parameter("kp2", .01)
-Parameter("km2", 1)
-# Additional rates for generalized kinetics
-Parameter("r_plus_oxi", .01)
-Parameter("r_minus_oxi", 1)
+# Initial conditions for inhibitors
+Initial(Inhibitor(type='oxamate'), Inhibitor_init)
+Initial(Inhibitor(type='rot'), Inhibitor_init)
+Initial(Inhibitor(type='oligo'), Inhibitor_init)
+Initial(Inhibitor(type='fccp'), Inhibitor_init)
 
-# Reaction rules
-# NADH binding to Ox (reversible)
-Rule("NADH_binds_Ox", NADH(b=None) + Ox(b=None) | NADH(b=1) % Ox(b=1), kp1, km1)
-# NADH_Ox converting to NAD+ and free Ox (reversible)
-Rule("NADH_Ox_to_NAD_plus", NADH(b=1) % Ox(b=1) | NAD_plus(b=None) + Ox(b=None), kp2, km2)
+# Define Reaction Rules
 
-# Additional rules for generalized kinetics
-Rule("NADH_Ox_to_NAD_plus_Ox", NADH_Ox(b=None) >> NAD_plus_Ox(b=None), r_plus_oxi)
-Rule("NAD_plus_Ox_to_NADH_Ox", NAD_plus_Ox(b=None) >> NADH_Ox(b=None), r_minus_oxi)
+# Rule for NADH binding to an oxidase (forming bound NADH)
+Rule('NADH_binding',
+     NADH(state='free') + Ox(b=None) >>
+     NADH(state='bound') % Ox(b=1),
+     Parameter('k_bind', 1e-3))
 
-# Observables (for tracking concentration changes over time)
-Observable("NADH_free", NADH(b=None))
-Observable("Ox_free", Ox(b=None))
-Observable("NADH_Ox_bound", NADH(b=1) % Ox(b=1))
-Observable("NAD_plus_free", NAD_plus(b=None))
-Observable("NAD_plus_Ox_bound", NAD_plus(b=1) % Ox(b=1))
+# Rule for NADH unbinding from the oxidase (releasing free NADH)
+Rule('NADH_unbinding',
+     NADH(state='bound') % Ox(b=1) >>
+     NADH(state='free') + Ox(b=None),
+     Parameter('k_unbind', 1e-3))
 
-# Additional observables for generalized kinetics
-Observable("NADH_Ox_complex", NADH_Ox(b=None))
-Observable("NAD_plus_Ox_complex", NAD_plus_Ox(b=None))
+# Rules for interactions with inhibitors
+for inhibitor_type in ['oxamate', 'rot', 'oligo', 'fccp']:
+    # Rule for inhibitor binding to free NADH
+    Rule(f'Inhibit_NADH_free_{inhibitor_type}',
+         NADH(state='free') + Inhibitor(type=inhibitor_type) >>
+         NADH(state='free') % Inhibitor(type=inhibitor_type),
+         Parameter(f'k_inhibit_free_{inhibitor_type}', 1e-4))
+
+    # Rule for inhibitor binding to bound NADH
+    Rule(f'Inhibit_NADH_bound_{inhibitor_type}',
+         NADH(state='bound') + Inhibitor(type=inhibitor_type) >>
+         NADH(state='bound') % Inhibitor(type=inhibitor_type),
+         Parameter(f'k_inhibit_bound_{inhibitor_type}', 1e-4))
+
+# Define Observables
+Observable("NADH_free", NADH(state='free'))
+Observable("NADH_bound", NADH(state='bound'))
+Observable("NADH_ratio", NADH(state='free') / NADH(state='bound'))
 
 # Simulation setup
-tspan = np.linspace(0, 1, 101)
+tspan = np.linspace(0, 100, 101)
 sim = ScipyOdeSimulator(model, tspan, verbose=True)
 output = sim.run()
 
 # Plotting results
-for obs in model.observables:
-    plt.plot(tspan, output.observables[obs.name], lw=2, label=obs.name)
+plt.figure(figsize=(10, 6))
+plt.plot(tspan, output.observables['NADH_free'], label='NADH_free')
+plt.plot(tspan, output.observables['NADH_bound'], label='NADH_bound')
+plt.plot(tspan, output.observables['NADH_ratio'], label='NADH_ratio', linestyle='--')
 plt.xlabel("Time")
-plt.ylabel("Concentration")
-plt.legend(loc=0)
+plt.ylabel("Concentration or Ratio")
+plt.legend(loc='best')
 plt.show()
-
-# Additional Monomers for effective oxidase and reductase
-Monomer("Eff_Ox", ['b'])
-Monomer("Eff_Red", ['b'])
-Monomer("NADH_Eff_Ox", ['b'])  # NADH-bound effective oxidase
-Monomer("NAD_plus_Eff_Ox", ['b'])  # NAD+-bound effective oxidase
-
-# Initial conditions for effective enzymes
-Parameter("Eff_Ox_init", 50)  # Example initial condition
-Parameter("Eff_Red_init", 50)  # Example initial condition
-Initial(Eff_Ox(b=None), Eff_Ox_init)
-Initial(Eff_Red(b=None), Eff_Red_init)
-
-# Additional rates for coarse-grained model
-Parameter("k_eff_bind", .01)  # Example rate
-Parameter("k_eff_unbind", 1)  # Example rate
-
-# Coarse-grained rules
-Rule("NADH_binds_Eff_Ox", NADH(b=None) + Eff_Ox(b=None) | NADH_Eff_Ox(b=None), k_eff_bind, k_eff_unbind)
-Rule("NAD_plus_binds_Eff_Ox", NAD_plus(b=None) + Eff_Ox(b=None) | NAD_plus_Eff_Ox(b=None), k_eff_bind, k_eff_unbind)
-
-# Update observables for coarse-grained model
-Observable("Eff_Ox_free", Eff_Ox(b=None))
-Observable("Eff_Red_free", Eff_Red(b=None))
-Observable("NADH_Eff_Ox_bound", NADH_Eff_Ox(b=None))
-Observable("NAD_plus_Eff_Ox_bound", NAD_plus_Eff_Ox(b=None))
