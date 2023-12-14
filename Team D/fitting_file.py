@@ -1,8 +1,9 @@
 import pandas as pd
 import numpy as np
 from pysb.simulator import ScipyOdeSimulator
-from scipy.optimize import minimize
 from redox_ratio import model
+import json
+from scipy.optimize import minimize
 
 # Load experimental data from different sheets
 data_nadhf = pd.read_excel('/mnt/data/elife-73808-fig2-data1-v2.xlsx', sheet_name='nadhf')
@@ -29,7 +30,7 @@ def cost_function(params, model, tspan, data_nadhf, data_nadhb, data_bound_ratio
     for condition in ['oxamate', 'rot', 'oligo', 'fccp']:
         simulated_nadh_free = simulation_results.observables['NADH_free']
         simulated_nadh_bound = simulation_results.observables['NADH_bound']
-        simulated_nadh_ratio = simulation_results.observables['NADH_ratio']
+        simulated_nadh_ratio = simulated_nadh_free / simulated_nadh_bound
 
         experimental_nadh_free = data_nadhf[condition].values
         experimental_nadh_bound = data_nadhb[condition].values
@@ -44,11 +45,9 @@ def cost_function(params, model, tspan, data_nadhf, data_nadhb, data_bound_ratio
 
 # Initial guess for parameters
 initial_params = [100, 50, 0, 0, 0, 0.01, 1, 0.01, 1, 0.01, 1]  # Adjust as needed
-param_bounds = [(0, None), (0, None), ...]  # Complete with appropriate bounds
 
- Initial guess for parameters
-initial_params = [100, 50, 0, 0, 0, 0.01, 1, 0.01, 1, 0.01, 1]  # Adjust as needed
-param_bounds = [(0, None), (0, None), ...]  # Complete with appropriate bounds
+# Parameter bounds
+param_bounds = [(0, None)] * len(initial_params)
 
 # Run the optimization
 result = minimize(
@@ -59,11 +58,16 @@ result = minimize(
     method='L-BFGS-B'
 )
 
-# Check the result and print the optimized parameters
+# After optimization
 if result.success:
     fitted_params = result.x
-    print("Optimization successful!")
-    print("Fitted parameters:", fitted_params)
+    filepath = '/Users/raegangiberson/Desktop/BMEG-470V_570V/Team D/optimized_parameters.json'
+
+    try:
+        with open(filepath, 'w') as file:
+            json.dump(fitted_params.tolist(), file)
+        print(f"Parameters saved to {filepath}")
+    except Exception as e:
+        print(f"Error writing to {filepath}: {e}")
 else:
-    print("Optimization failed.")
-    print("Reason:", result.message)
+    print("Optimization was not successful.")
