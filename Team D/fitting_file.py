@@ -61,6 +61,8 @@ result = minimize(
 # After optimization
 if result.success:
     fitted_params = result.x
+    print(f"Optimized Parameters: {fitted_params}")
+
     filepath = '/Users/raegangiberson/Desktop/BMEG-470V_570V/Team D/optimized_parameters.json'
 
     try:
