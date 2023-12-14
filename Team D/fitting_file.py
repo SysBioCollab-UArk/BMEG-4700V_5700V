@@ -4,27 +4,16 @@ from pysb.simulator import ScipyOdeSimulator
 from scipy.optimize import minimize
 from redox_ratio import model
 
-# Load experimental data into pandas DataFrames
-experimental_data_fig2 = pd.read_excel('/mnt/data/elife-73808-fig2-data1-v2.xlsx')  # Example: oxamate condition
-experimental_data_fig5 = pd.read_excel('/mnt/data/elife-73808-fig5-data1-v2.xlsx')  # Example: rot condition
-experimental_data_fig6 = pd.read_excel('/mnt/data/elife-73808-fig6-data1-v2.xlsx')  # Additional condition
-experimental_data_fig7 = pd.read_excel('/mnt/data/elife-73808-fig7-data1-v2.xlsx')  # Additional condition
-experimental_data_fig8 = pd.read_excel('/mnt/data/elife-73808-fig8-data1-v2.xlsx')  # Additional condition
+# Load experimental data from different sheets
+data_nadhf = pd.read_excel('/mnt/data/elife-73808-fig2-data1-v2.xlsx', sheet_name='nadhf')
+data_nadhb = pd.read_excel('/mnt/data/elife-73808-fig2-data1-v2.xlsx', sheet_name='nadhb')
+data_bound_ratio = pd.read_excel('/mnt/data/elife-73808-fig2-data1-v2.xlsx', sheet_name='bound ratio')
 
-# Combine the data into a list for easy iteration in the cost function
-experimental_data_list = [
-    experimental_data_fig2,
-    experimental_data_fig5,
-    experimental_data_fig6,
-    experimental_data_fig7,
-    experimental_data_fig8
-]
+# Define the time span for the simulation
+tspan = np.linspace(0, len(data_nadhf) - 1, len(data_nadhf))
 
-# Define the time span for the simulation based on your experimental data
-tspan = np.linspace(0, len(experimental_data_fig2) - 1, len(experimental_data_fig2))
-
-# Define the cost function that will be minimized
-def cost_function(params, model, experimental_data_list, tspan):
+# Define the cost function
+def cost_function(params, model, tspan, data_nadhf, data_nadhb, data_bound_ratio):
     total_cost = 0
 
     # Update model parameters
@@ -32,24 +21,21 @@ def cost_function(params, model, experimental_data_list, tspan):
         if i < len(params):
             param.value = params[i]
 
-    # Iterate over each data set
-    for data_df in experimental_data_list:
-        # Update model for current condition if necessary
-        # ...
+    # Simulate the model
+    sim = ScipyOdeSimulator(model, tspan)
+    simulation_results = sim.run()
 
-        # Simulate the model
-        sim = ScipyOdeSimulator(model, tspan)
-        simulation_results = sim.run()
-
-        # Compare simulation with experimental data
+    # Iterating through each inhibitor condition
+    for condition in ['oxamate', 'rot', 'oligo', 'fccp']:
         simulated_nadh_free = simulation_results.observables['NADH_free']
         simulated_nadh_bound = simulation_results.observables['NADH_bound']
         simulated_nadh_ratio = simulation_results.observables['NADH_ratio']
 
-        experimental_nadh_free = data_df['NADHf'].values  # Replace 'NADHf' with actual column name
-        experimental_nadh_bound = data_df['NADHb'].values  # Replace 'NADHb' with actual column name
-        experimental_nadh_ratio = data_df['NADH_ratio'].values  # Replace 'NADH_ratio' with actual column name
+        experimental_nadh_free = data_nadhf[condition].values
+        experimental_nadh_bound = data_nadhb[condition].values
+        experimental_nadh_ratio = data_bound_ratio[condition].values
 
+        # Calculate cost for each condition
         total_cost += np.sum((simulated_nadh_free - experimental_nadh_free) ** 2)
         total_cost += np.sum((simulated_nadh_bound - experimental_nadh_bound) ** 2)
         total_cost += np.sum((simulated_nadh_ratio - experimental_nadh_ratio) ** 2)
@@ -57,21 +43,27 @@ def cost_function(params, model, experimental_data_list, tspan):
     return total_cost
 
 # Initial guess for parameters
-initial_params = [100, 50, 0, 0, 0, 0.01, 1, 0.01, 1, 0.5]  # Adjust as needed
+initial_params = [100, 50, 0, 0, 0, 0.01, 1, 0.01, 1, 0.01, 1]  # Adjust as needed
+param_bounds = [(0, None), (0, None), ...]  # Complete with appropriate bounds
+
+ Initial guess for parameters
+initial_params = [100, 50, 0, 0, 0, 0.01, 1, 0.01, 1, 0.01, 1]  # Adjust as needed
 param_bounds = [(0, None), (0, None), ...]  # Complete with appropriate bounds
 
 # Run the optimization
 result = minimize(
     cost_function,
     initial_params,
-    args=(model, experimental_data_list, tspan),
+    args=(model, tspan, data_nadhf, data_nadhb, data_bound_ratio),
     bounds=param_bounds,
     method='L-BFGS-B'
 )
 
-# Check the result
+# Check the result and print the optimized parameters
 if result.success:
     fitted_params = result.x
+    print("Optimization successful!")
     print("Fitted parameters:", fitted_params)
 else:
-    raise ValueError(result.message)
+    print("Optimization failed.")
+    print("Reason:", result.message)
