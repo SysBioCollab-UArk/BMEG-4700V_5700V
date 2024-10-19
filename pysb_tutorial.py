@@ -14,11 +14,11 @@ Initial(E(b=None), Parameter('E_0', 10))
 Initial(X(b=None, state='S'), Parameter('S_0', 100))
 
 # Rules
-Parameter('kf', 0.1)  # 0.1
-Parameter('kr', 1000)
+Parameter('kf', 0.1)  # s^-1
+Parameter('kr', 1)  # 1000 # s^-1
 Rule('E_binds_S', E(b=None) + X(b=None, state='S') | E(b=1) % X(b=1, state='S'), kf, kr)
 
-Parameter('kcat', 100)
+Parameter('kcat', 1)  # 100 # s^-1
 Rule('ES_makes_P', E(b=1) % X(b=1, state='S') >> E(b=None) + X(b=None, state='P'), kcat)
 
 # Observables
@@ -32,14 +32,15 @@ Observable('Better_be_zero', X(b=ANY, state='P'))
 if __name__ == '__main__':
 
     # Simulation commands
-    tspan = np.linspace(0, 50, 501)
+    tspan = np.linspace(0, 30, 301)
     sim = ScipyOdeSimulator(model, tspan, verbose=True)
     output = sim.run()
 
     for obs in model.observables:
         plt.plot(tspan, output.observables[obs.name], lw=2, label=obs.name)
     plt.xlabel('time')
-    plt.ylabel('concentration')
+    plt.ylabel('# of molecules')
     plt.legend(loc=0)
+    plt.tight_layout()
 
     plt.show()
