@@ -19,7 +19,7 @@ nchains = 5
 niterations = 5000
 
 # Initialize PySB solver object for running simulations. Simulation timespan should match experimental data.
-files = sorted(os.listdir('.'))
+files = sorted(os.listdir(''))
 exp_time_files = [f for f in files if re.search(r'exp_data_time_\d+', f)]
 experiments_time = [np.genfromtxt(file, delimiter=',', names=True) for file in exp_time_files]
 n_experiments = len(experiments_time)
