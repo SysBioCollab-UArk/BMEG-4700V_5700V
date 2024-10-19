@@ -1,0 +1,111 @@
+#Initial states
+
+#Inputs
+AngIIin = False
+Stress = False
+Wss = False
+Integrins = False
+SACs = False
+
+#Receptors
+AT1R = False
+AT2R = False
+TGFBR1 = False
+TGFBR2 = False
+ETAR = False
+ETBR = False
+PDGFR = False
+
+#Extra cellular in
+AngII = False
+TGFB1 = False
+latentTGFB1 = False
+PDGF = False
+NO = False
+ET1 = False
+
+#Intracellular
+Actin = True
+Akt = False
+Arp2_3 = False
+Ca = True
+Cdc42 = True
+Col1mRNA = False
+Col3mRNA = False
+ERK = False
+FAK = True
+JNK = False
+MLCK = False
+mTOR = False
+mTORC1 = False
+mTORC2 = False
+Myosin = False
+p38 = False
+p70S6K = False
+PI3K = False
+pSmad2_3 = False
+RhoA = False
+ROCK = False
+Smad4 = False
+Smad7 = False
+
+#Extracellular Out
+MMP1 = False
+MMP2 = False
+MMP9 = False
+TIMP = False
+TSP1 = False
+
+#Outputs
+Col1 = False
+Col3 = False
+SMCproliferation = False
+ActomyosinActivity = False
+
+#Reactions
+
+Actin* = Arp2_3 or ROCK
+ActomyosinActivity* = Actin and Myosin
+Akt* = mTORC2 or PI3K
+AngII* = AngIIin or Stress
+Arp2_3* = Cdc42
+AT1R* = AngII
+AT2R* = AngII
+Ca* = AT1R or ETAR or (Stress and SACs)
+Cdc42* = FAK
+Col1* = Col1mRNA and not MMP1 and not MMP2
+Col1mRNA* = ERK or p38 or Smad4
+Col3* = Col3mRNA and not MMP1 and not MMP2
+Col3mRNA* = p38 or Smad4
+ERK* = (AT1R and not AT2R) or (ETAR and not AT2R) or (FAK and not AT2R) or (PDGFR and not AT2R) or (TGFBR1 and not AT2R)
+ET1* = Wss and not NO
+ETAR* = ET1
+ETBR* = ET1
+FAK* = Integrins and Stress
+JNK* = AT1R or FAK or PDGFR or TGFBR1
+latentTGFB1* = Stress
+MLCK = (Ca and not NO) or (ROCK and not NO)
+MMP2* = (Akt and not TIMP) or (ERK and not TIMP) or (JNK and not TIMP) or (p38 and not TIMP)
+MMP9* = (ERK and not TIMP) or (p38 and not TIMP)
+mTOR* = Akt
+mTORC1* = mTOR
+mTORC2* = mTOR
+Myosin* = MLCK
+NO* = AT2R or ETBR or Wss
+p38* = AT1R or FAK or PDGFR or TGFBR1
+p70S6K* = mTORC2
+PDGF* = Stress
+PDGFR* = PDGF
+PI3K* = AT1R or ETAR or PDGFR or TGFBR1
+pSmad2_3* = AT1R or TGFBR1
+RhoA* = (AT1R and not AT2R) or (mTORC2 and not AT2R) or (Stress and Integrins and not AT2R)
+ROCK* = RhoA
+Smad4* = pSmad2_3
+Smad7* = Smad4
+SMCproliferation = ERK or p70S6K
+TGFB1 = (latentTGFB1 and MMP2) or (latentTGFB1 and MMP9) or (latentTGFB1 and Stress and Integrins) or (latentTGFB1 and TSP1)
+TGFBR1* = TGFBR2 and not Smad7
+TGFBR2* = TGFB1
+TIMP* = Smad4
+TSP1 = ERK or JNK or p38
+
