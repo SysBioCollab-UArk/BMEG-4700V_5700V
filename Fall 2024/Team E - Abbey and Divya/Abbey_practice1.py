@@ -15,7 +15,7 @@ Monomer('B', ['a','state'], {'state':['u','p']})
 Parameter('A_0', 100)
 Parameter('B_0', 80)
 Initial(A(b=None), A_0)
-Initial(B(a=None),state='u', B_0)
+Initial(B(a=None, state='u'), B_0)
 
 # Rules
 
