@@ -80,42 +80,15 @@ if __name__ == "__main__":
     plt.tight_layout()
 
     # Output data to csv files, if desired
-    # output_to_file = True  # Set to True if you want to save the synthetic data for calibration
-    # if output_to_file:
-    #     with open('toy_model_synth_data.csv', 'w') as csvfile:
-    #         writer = csv.writer(csvfile, delimiter=',')
-    #         writer.writerow(['observable', 'time', 'time_units', 'average', 'stderr', 'amount_units', 'expt_id'])
-
-            #
-        # out_file_mean = open("%s_exp_data_avg.csv" % model.name, 'w')
-        # out_file_sdev = open("%s_exp_data_sd.csv" % model.name, 'w')
-        # out_file_time = open('%s_exp_data_time.csv' % model.name, 'w')
-        # # write headers
-        # out_file_time.write("time\n")
-        # for j, obs in enumerate(synth_obs):
-        #     if j > 0:
-        #         out_file_mean.write(",")
-        #         out_file_sdev.write(",")
-        #     out_file_mean.write(obs)
-        #     out_file_sdev.write(obs)
-        # out_file_mean.write("\n")
-        # out_file_sdev.write("\n")
-        # # write rest of output
-        # for i in range(len(tspan)):
-        #     out_file_time.write("%g\n" % tspan[i])
-        #     for j, obs in enumerate(synth_obs):
-        #         if j > 0:
-        #             out_file_mean.write(",")
-        #             out_file_sdev.write(",")
-        #         out_file_mean.write("%g" % synth_data[obs][i])
-        #         # At time 0, need to make sure sdev is NON-ZERO
-        #         val_obs_t = output.observables[obs][i] if i > 0 else min(output.observables[obs][1:])
-        #         out_file_sdev.write("%g" % (0.1 * val_obs_t))
-        #     out_file_mean.write("\n")
-        #     out_file_sdev.write("\n")
-        # # close files
-        # out_file_mean.close()
-        # out_file_sdev.close()
-        # out_file_time.close()
+    output_to_file = True  # Set to True if you want to save the synthetic data for calibration
+    if output_to_file:
+        with open('toy_model_synth_data.csv', 'w') as csvfile:
+            writer = csv.writer(csvfile, delimiter=',')
+            writer.writerow(['observable', 'time', 'time_units', 'average', 'stderr', 'amount_units', 'expt_id'])
+            writer.writerows([[obs, t, 'arbitrary', avg, max(5, stderr), 'arbitrary', 'tutorial']
+                              for obs in synth_obs
+                              for t in tspan[t_sample_idx]
+                              for avg in synth_data[obs]
+                              for stderr in 0.1 * output.observables[obs][t_sample_idx]])
 
     plt.show()
