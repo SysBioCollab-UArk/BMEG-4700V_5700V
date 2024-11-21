@@ -85,10 +85,9 @@ if __name__ == "__main__":
         with open('toy_model_synth_data.csv', 'w', newline='') as csvfile:
             writer = csv.writer(csvfile, delimiter=',')
             writer.writerow(['observable', 'time', 'time_units', 'average', 'stderr', 'amount_units', 'expt_id'])
-            writer.writerows([[obs, t, 'arbitrary', avg, max(5, stderr), 'arbitrary', 'tutorial']
-                              for obs in synth_obs
-                              for t in tspan[t_sample_idx]
-                              for avg in synth_data[obs]
-                              for stderr in 0.1 * output.observables[obs][t_sample_idx]])
+            for obs in synth_obs:
+                for i,t in enumerate(t_sample_idx):
+                    writer.writerow([obs, tspan[t], 'arbitrary', synth_data[obs][i],
+                                       max(5, 0.1 * output.observables[obs][t]), 'arbitrary', 'tutorial'])
 
     plt.show()
