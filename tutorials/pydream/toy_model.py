@@ -82,7 +82,7 @@ if __name__ == "__main__":
     # Output data to csv files, if desired
     output_to_file = True  # Set to True if you want to save the synthetic data for calibration
     if output_to_file:
-        with open('toy_model_synth_data.csv', 'w') as csvfile:
+        with open('toy_model_synth_data.csv', 'w', newline='') as csvfile:
             writer = csv.writer(csvfile, delimiter=',')
             writer.writerow(['observable', 'time', 'time_units', 'average', 'stderr', 'amount_units', 'expt_id'])
             writer.writerows([[obs, t, 'arbitrary', avg, max(5, stderr), 'arbitrary', 'tutorial']
