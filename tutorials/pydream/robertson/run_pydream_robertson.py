@@ -1,15 +1,14 @@
-from tutorials.pydream.toy_model import model
+from tutorials.pydream.robertson.robertson import model
 from param_calibration import *
 from pysb.simulator import ScipyOdeSimulator
 
 solver = ScipyOdeSimulator(model)
 sim_protocol = SimulationProtocol(solver)
 
-custom_priors = {'k_5': ('uniform', 2)}
-no_sample = ['k_6']
-obs_labels = {'complex_2': 'complex 2', 'product_total': 'product'}
+custom_priors = {'k1': ('uniform', 6), 'k2': ('uniform', 6), 'k3': ('uniform', 6)}
+no_sample = ['A_0', 'B_0', 'C_0']
 
-exp_data_file = 'toy_model_synth_data.csv'
+exp_data_file = 'robertson_synth_data.csv'
 
 if __name__ == '__main__':
 
@@ -19,5 +18,4 @@ if __name__ == '__main__':
                                       priors=custom_priors,
                                       no_sample=no_sample)
 
-    calibrator.run(niterations=5000, nchains=5, obs_labels=obs_labels, plot_results=True,
-                   plot_tc_args={'separate_plots': False})
+    calibrator.run(niterations=5000, nchains=5, plot_results=True)

@@ -33,20 +33,20 @@ Observable('product_total', S1(state='pro') + S2(state='pro'))
 # Define the binding rules
 Parameter('k_1', 0.002)
 Parameter('k_2', 0.001)
-Rule('binding_1',
-     E(binding1=None) + S1(state='sub', binding=None) | E(binding1=1) % S1(state='sub', binding=1), k_1, k_2)
+Rule('binding_1', E(binding1=None) + S1(state='sub', binding=None) | E(binding1=1) % S1(state='sub', binding=1),
+     k_1, k_2)
 Parameter('k_4', 0.004)
-#PYDREAM_IT prior k_5 uniform 2
 Parameter('k_5', 0.001)
 Rule('binding_2',
      E(binding1=None) + S2(state='sub', binding=None) | E(binding1=1) % S2(state='sub', binding=1), k_4, k_5)
 
 # Catalyze
 Parameter('k_3', 0.1)
-#PYDREAM_IT no-sample k_6
 Parameter('k_6', 0.1)
-Rule('catalyze_1', E(binding1=1) % S1(state='sub', binding=1) >> E(binding1=None) + S1(state='pro', binding=None), k_3)
-Rule('catalyze_2', E(binding1=1) % S2(state='sub', binding=1) >> E(binding1=None) + S2(state='pro', binding=None), k_6)
+Rule('catalyze_1', E(binding1=1) % S1(state='sub', binding=1) >> E(binding1=None) + S1(state='pro', binding=None),
+     k_3)
+Rule('catalyze_2', E(binding1=1) % S2(state='sub', binding=1) >> E(binding1=None) + S2(state='pro', binding=None),
+     k_6)
 
 if __name__ == "__main__":
     from pysb.simulator import ScipyOdeSimulator
@@ -64,6 +64,10 @@ if __name__ == "__main__":
     for obs in model.observables:
         p = plt.plot(tspan, output.observables[obs.name], lw=2, label=obs.name)
         color[obs.name] = p[0].get_color()
+    plt.xlabel('time')
+    plt.ylabel('concentration')
+    plt.legend(loc=0, bbox_to_anchor=[1, 1])
+    plt.tight_layout()
 
     # Create synthetic data
     t_sample_idx = [i for i in range(0, len(tspan), 20)]
@@ -74,12 +78,8 @@ if __name__ == "__main__":
         synth_data[obs] = norm.rvs(output.observables[obs][t_sample_idx], 0.1 * output.observables[obs][t_sample_idx],
                                    random_state=10)
         plt.plot(tspan[t_sample_idx], synth_data[obs], 'o', ms=6, color=color[obs])
-    plt.xlabel('time')
-    plt.ylabel('concentration')
-    plt.legend(loc=0, bbox_to_anchor=[1, 1])
-    plt.tight_layout()
 
-    # Output data to csv files, if desired
+    # Output synthetic data to csv files, if desired
     output_to_file = True  # Set to True if you want to save the synthetic data for calibration
     if output_to_file:
         with open('toy_model_synth_data.csv', 'w', newline='') as csvfile:
