@@ -19,5 +19,5 @@ if __name__ == '__main__':
                                       priors=custom_priors,
                                       no_sample=no_sample)
 
-    calibrator.run(niterations=5000, nchains=5, obs_labels=obs_labels, plot_results=True,
+    calibrator.run(niterations=50000, nchains=5, obs_labels=obs_labels, plot_results=True,
                    plot_tc_args={'separate_plots': False})
