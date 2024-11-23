@@ -1,4 +1,4 @@
-from run_pydream_toy_model import *  # import from the file you ran PyDREAM from
+from toy_model.run_pydream_toy_model import *  # import from the file you ran PyDREAM from
 import glob
 import os
 
