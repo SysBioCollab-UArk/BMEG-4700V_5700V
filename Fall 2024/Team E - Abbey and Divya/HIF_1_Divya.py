@@ -4,8 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 Model()
-# Monomers
 
+# Monomers
 Monomer('HIF1', ['p1', 'p2', 'a1'],
         {'p1': ['u', 'oh', 'ub'], 'p2': ['u', 'oh', 'ub'], 'a1': ['u', 'oh']})
 Monomer('HIF2', ['p1','p2', 'a1'],
@@ -17,6 +17,19 @@ Monomer('FIH', ['hif_a1'])
 Monomer('VHL', ['hif_p'])
 Monomer('p300', ['hif_a1'])
 Monomer('proteosome', ['hif_p'])
+
+
+# Initial Conditions
+Initial(HIF1(p1='u', p2='u', a1='u'), Parameter('HIF1_0', 50))
+Initial(HIF2(p1='u', p2='u', a1='u'), Parameter('HIF2_0', 50))
+Initial(PHD1(hif_p=None), Parameter('PHD1_0', 50))
+Initial(PHD2(hif_p=None), Parameter('PHD2_0', 50))
+Initial(PHD3(hif_p=None), Parameter('PHD3_0', 50))
+Initial(FIH(hif_a1=None), Parameter('FIH_0', 50))
+Initial(VHL(hif_p=None), Parameter('VHL_0', 50))
+Initial(p300(hif_a1=None), Parameter('p300_0', 50))
+Initial(proteosome(hif_p=None), Parameter('proteosome_0', 50))
+
 
 # Parameters
 Parameter('kf_PHD3_binds_HIF1_p2')
@@ -121,12 +134,12 @@ Rule('HIF1_binds_p300', HIF1(a1 = 'u') + p300(hif_a1=None) | HIF1(a1 =('u', 1)) 
 # Observables
 
 # Observable('degradation', proteosome(hif_p=None))
-Observable('p300 binding', p300(hif_a1=None))
+Observable('p300_binding', p300(hif_a1=None))
 
 
 # Simulation Commands
 
-tspan = np.linspace(0, 1, 100)
+tspan = np.linspace(0, 30, 100)
 sim = ScipyOdeSimulator(model, tspan, verbose=True)
 result = sim.run()
 
