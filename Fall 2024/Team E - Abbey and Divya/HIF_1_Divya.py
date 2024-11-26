@@ -132,8 +132,8 @@ Rule('HIF1_binds_p300', HIF1(a1 = 'u') + p300(hif_a1=None) | HIF1(a1 =('u', 1)) 
      kf_HIF1_binds_p300, kr_HIF1_binds_p300)
 
 # Observables
-
-# Observable('degradation', proteosome(hif_p=None))
+Observable('free_HIF1', HIF1(p1='u', p2='u', a1='u'))
+Observable('degradation', proteosome(hif_p=None))
 Observable('p300_binding', p300(hif_a1=None))
 
 
