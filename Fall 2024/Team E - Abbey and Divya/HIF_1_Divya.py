@@ -117,9 +117,9 @@ Rule('HIF_1_p1_degrades', HIF1(p1 =('ub', 1)) % VHL(hif_p=1) >> VHL(hif_p=None),
 
 #HIF degrades after one ubiquination at p2
 Rule('HIF_1_p2_binds_proteosome', HIF1(p2='ub') + proteosome(hif_p=None) | HIF1(p2 =('ub', 1)) % VHL(hif_p=1),
-    kf_HIF_1_p1_proteo_binding, kr_HIF_1_p2_proteo_binding)
+    kf_HIF_1_p2_proteo_binding, kr_HIF_1_p2_proteo_binding)
 Rule('HIF_1_p2_degrades', HIF1(p2 =('ub', 1)) % VHL(hif_p=1) >> VHL(hif_p=None),
-    k_HIF_1_p1_degrades)
+    k_HIF_1_p2_degrades)
 
 #FIH hydroxylates HIF-1 at a1 site
 Rule('HIF_1_binds_FIH', HIF1(a1 = 'u') + FIH(hif_a1=None) | HIF1(a1 =('u', 1)) % FIH(hif_a1=1),
@@ -139,11 +139,12 @@ Observable('p300_binding', p300(hif_a1=None))
 
 # Simulation Commands
 
-tspan = np.linspace(0, 30, 100)
+tspan = np.linspace(0, 30, 301)
 sim = ScipyOdeSimulator(model, tspan, verbose=True)
 result = sim.run()
 
 for obs in model.observables:
+    print('plotting')
     plt.plot(tspan, result.observables[obs.name], lw=2, label=obs.name)
 
 plt.xlabel('time')
