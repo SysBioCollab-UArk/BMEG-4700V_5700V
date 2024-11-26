@@ -191,27 +191,27 @@ Rule('HIF2_binding_to_gene', HIF2_nucleus(a1 =('u', 1), gene = None) % p300(hif_
      kf_HIF2_binds_PHD3_gene, kr_HIF2_binds_PHD3_gene
 
 #VHL binds to HIF-2 with 1-OH on p2 and ubiquinates
-Rule('VHL_binds_HIF_2_p2', HIF2_nucleus(p2='oh') + VHL(hif_p=None) | HIF2_nucleus(p2=('oh', 1)) % VHL(hif_p=1),
+Rule('VHL_binds_HIF_2_p2_n', HIF2_nucleus(p2='oh') + VHL(hif_p=None) | HIF2_nucleus(p2=('oh', 1)) % VHL(hif_p=1),
      kf_VHL_binds_HIF_2_p2_n, kr_VHL_binds_HIF_2_p2_n)
-Rule('VHL_ubiqu_HIF_2_p2',HIF2_nucleus(p2=('oh', 1)) % VHL(hif_p=1) >> HIF2_nucleus(p2 = 'ub') + VHL(hif_p=None),
+Rule('VHL_ubiqu_HIF_2_p2_n',HIF2_nucleus(p2=('oh', 1)) % VHL(hif_p=1) >> HIF2_nucleus(p2 = 'ub') + VHL(hif_p=None),
      k_VHL_ubiq_HIF_2_p2_n)
 
 #VHL binds to HIF-2 with 1-OH on p1 and ubiquinates
-Rule('VHL_binds_HIF_2_p1', HIF2_nucleus(p1='oh') + VHL(hif_p=None) | HIF2_nucleus(p1=('oh', 1)) % VHL(hif_p=1),
+Rule('VHL_binds_HIF_2_p1_n', HIF2_nucleus(p1='oh') + VHL(hif_p=None) | HIF2_nucleus(p1=('oh', 1)) % VHL(hif_p=1),
      kf_VHL_binds_HIF_2_p1_n, kr_VHL_binds_HIF_2_p1_n)
-Rule('VHL_ubiqu_HIF_2_p1',HIF2_nucleus(p1=('oh', 1)) % VHL(hif_p=1) >> HIF2_nucleus(p1 = 'ub') + VHL(hif_p=None),
+Rule('VHL_ubiqu_HIF_2_p1_n',HIF2_nucleus(p1=('oh', 1)) % VHL(hif_p=1) >> HIF2_nucleus(p1 = 'ub') + VHL(hif_p=None),
      k_VHL_ubiq_HIF_2_p1_n)
 
 #HIF degrades after one ubiquination at p1
-Rule('HIF_2_p1_binds_proteosome', HIF2_nucleus(p1='ub') + proteosome(hif_p=None) | HIF2_nucleus(p1 =('ub', 1)) % VHL(hif_p=1),
+Rule('HIF_2_p1_binds_proteosome_n', HIF2_nucleus(p1='ub') + proteosome(hif_p=None) | HIF2_nucleus(p1 =('ub', 1)) % VHL(hif_p=1),
     kf_HIF_2_p1_proteo_binding_n, kr_HIF_2_p1_proteo_binding_n)
-Rule('HIF_2_p1_degrades', HIF2_nucleus(p1 =('ub', 1)) % VHL(hif_p=1) >> VHL(hif_p=None),
+Rule('HIF_2_p1_degrades_n', HIF2_nucleus(p1 =('ub', 1)) % VHL(hif_p=1) >> VHL(hif_p=None),
     k_HIF_2_p1_degrades_n)
 
 #HIF degrades after one ubiquination at p2
-Rule('HIF_2_p2_binds_proteosome', HIF2_nucleus(p2='ub') + proteosome(hif_p=None) | HIF2_nucleus(p2 =('ub', 1)) % VHL(hif_p=1),
+Rule('HIF_2_p2_binds_proteosome_n', HIF2_nucleus(p2='ub') + proteosome(hif_p=None) | HIF2_nucleus(p2 =('ub', 1)) % VHL(hif_p=1),
     kf_HIF_2_p2_proteo_binding_n, kr_HIF_2_p2_proteo_binding_n)
-Rule('HIF_2_p2_degrades', HIF2_nucleus(p2 =('ub', 1)) % VHL(hif_p=1) >> VHL(hif_p=None),
+Rule('HIF_2_p2_degrades_n', HIF2_nucleus(p2 =('ub', 1)) % VHL(hif_p=1) >> VHL(hif_p=None),
     k_HIF_2_p2_degrades_n)
 
 
