@@ -188,7 +188,7 @@ Rule('PHD1_hydroxy_HIF2_p1_in_nucleus', HIF2(p1=('u', 1)) % PHD1(hif_p=1) >> HIF
 #HIF-2 binding to PHD3 gene
 Rule('HIF2_binding_to_gene', HIF2_nucleus(a1 =('u', 1), gene = None) % p300(hif_a1=1) + PHD3_gene(prom=None) |
      HIF2_nucleus(a1 =('u', 1), gene=1) % p300(hif_a1=1) % PHD3_gene(prom=1),
-     kf_HIF2_binds_PHD3_gene, kr_HIF2_binds_PHD3_gene)
+     kf_HIF2_binds_PHD3_gene, kr_HIF2_binds_PHD3_gene
 
 #VHL binds to HIF-2 with 1-OH on p2 and ubiquinates
 Rule('VHL_binds_HIF_2_p2', HIF2_nucleus(p2='oh') + VHL(hif_p=None) | HIF2_nucleus(p2=('oh', 1)) % VHL(hif_p=1),
