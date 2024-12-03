@@ -6,10 +6,10 @@ import matplotlib.pyplot as plt
 Model()
 
 # Monomers
-Monomer('HIF1', ['p1', 'p2', 'a1'],
-        {'p1': ['u', 'oh', 'ub'], 'p2': ['u', 'oh', 'ub'], 'a1': ['u', 'oh']})
-Monomer('HIF2', ['p1','p2', 'a1'],
-        {'p1': ['u', 'oh', 'ub'], 'p2': ['u', 'oh', 'ub'], 'a1': ['u', 'oh']})
+Monomer('HIF1', ['p1', 'p2', 'a1', 'loc', 'gene'],
+        {'p1': ['u', 'oh', 'ub'], 'p2': ['u', 'oh', 'ub'], 'a1': ['u', 'oh'], 'loc': ['cyt', 'nuc']})
+Monomer('HIF2', ['p1','p2', 'a1', 'loc'],
+        {'p1': ['u', 'oh', 'ub'], 'p2': ['u', 'oh', 'ub'], 'a1': ['u', 'oh'], 'loc': ['cyt', 'nuc']})
 Monomer('PHD1', ['hif_p'])
 Monomer('PHD2', ['hif_p'])
 Monomer('PHD3', ['hif_p'])
@@ -17,18 +17,18 @@ Monomer('FIH', ['hif_a1'])
 Monomer('VHL', ['hif_p'])
 Monomer('p300', ['hif_a1'])
 Monomer('proteosome', ['hif_p'])
-Monomer('HIF1_nucleus', ['p1','p2', 'a1','gene'],
-        {'p1': ['u', 'oh', 'ub'], 'p2': ['u', 'oh', 'ub'], 'a1': ['u', 'oh']})
-Monomer('HIF2_nucleus', ['p1','p2', 'a1','gene'],
-        {'p1': ['u', 'oh', 'ub'], 'p2': ['u', 'oh', 'ub'], 'a1': ['u', 'oh']})
+# Monomer('HIF1_nucleus', ['p1','p2', 'a1','gene'],
+#         {'p1': ['u', 'oh', 'ub'], 'p2': ['u', 'oh', 'ub'], 'a1': ['u', 'oh']})
+# Monomer('HIF2_nucleus', ['p1','p2', 'a1','gene'],
+#         {'p1': ['u', 'oh', 'ub'], 'p2': ['u', 'oh', 'ub'], 'a1': ['u', 'oh']})
 Monomer('Importer', ['hif'])
 Monomer('PHD3_nucleus', ['hif_p'])
 Monomer('PHD3_gene', ['prom'])
 
 
 # Initial Conditions
-Initial(HIF1(p1='u', p2='u', a1='u'), Parameter('HIF1_0', 50))
-Initial(HIF2(p1='u', p2='u', a1='u'), Parameter('HIF2_0', 50))
+Initial(HIF1(p1='u', p2='u', a1='u', loc='cyt', gene=None), Parameter('HIF1_0', 50))
+Initial(HIF2(p1='u', p2='u', a1='u', loc='cyt'), Parameter('HIF2_0', 50))
 Initial(PHD1(hif_p=None), Parameter('PHD1_0', 50))
 Initial(PHD2(hif_p=None), Parameter('PHD2_0', 50))
 Initial(PHD3(hif_p=None), Parameter('PHD3_0', 50))
@@ -36,6 +36,7 @@ Initial(FIH(hif_a1=None), Parameter('FIH_0', 50))
 Initial(VHL(hif_p=None), Parameter('VHL_0', 50))
 Initial(p300(hif_a1=None), Parameter('p300_0', 50))
 Initial(proteosome(hif_p=None), Parameter('proteosome_0', 50))
+
 
 
 # Parameters
@@ -168,62 +169,62 @@ Rule('HIF_1_hydroxylated_at_a1', HIF1(a1 =('u', 1)) % FIH(hif_a1=1) >> HIF1(a1 =
      k_HIF_1_hydroxylated_at_a1)
 
 #Representing the HIF-1 protein entering the nucleus
-Rule('HIF_1_binds_importer', HIF1(a1 = 'u') + Importer(hif=None) | HIF1(a1=('u', 1)) % Importer(hif=1),
+Rule('HIF_1_binds_importer', HIF1(a1 = 'u', loc='cyt') + Importer(hif=None) | HIF1(a1=('u', 1), loc='cyt') % Importer(hif=1),
      kf_HIF1_binds_importer, kr_HIF1_binds_importer)
-Rule('HIF_1_enters_nucleus',HIF1(a1=('u', 1)) % Importer(hif=1) >> Importer(hif=None) + HIF1_nucleus(a1='u'),
+Rule('HIF_1_enters_nucleus',HIF1(a1=('u', 1), loc='cyt') % Importer(hif=1) >> Importer(hif=None) + HIF1(a1='u', loc='nuc'),
      k_HIF1_enters_nucleus)
 
 #p300 interacts with HIF-1_nucleus
-Rule('HIF1_binds_p300', HIF1_nucleus(a1 = 'u') + p300(hif_a1=None) | HIF1_nucleus(a1 =('u', 1)) % p300(hif_a1=1),
+Rule('HIF1_binds_p300', HIF1(a1 = 'u', loc='nuc') + p300(hif_a1=None) | HIF1(a1 =('u', 1), loc='nuc') % p300(hif_a1=1),
      kf_HIF1_binds_p300, kr_HIF1_binds_p300)
 
 
 #PHD3 hydroxylates HIF-1a at Proline 531
-Rule('PHD3_binds_HIF1_p2_in_nucleus', HIF1_nucleus(p2='u') + PHD3_nucleus(hif_p=None) | HIF1_nucleus(p2=('u', 1)) % PHD3_nucleus(hif_p=1),
+Rule('PHD3_binds_HIF1_p2_in_nucleus', HIF1(p2='u', loc='nuc') + PHD3_nucleus(hif_p=None) | HIF1(p2=('u', 1), loc='nuc') % PHD3_nucleus(hif_p=1),
      kf_PHD3_binds_HIF1_p2_n, kr_PHD3_binds_HIF1_p2_n)
-Rule('PHD3_hydroxy_HIF1_p2_in_nucleus', HIF1_nucleus(p2=('u', 1)) % PHD3_nucleus(hif_p=1) >> HIF1_nucleus(p2='oh') + PHD3_nucleus(hif_p=None),
+Rule('PHD3_hydroxy_HIF1_p2_in_nucleus', HIF1(p2=('u', 1), loc='nuc') % PHD3_nucleus(hif_p=1) >> HIF1(p2='oh', loc='nuc') + PHD3_nucleus(hif_p=None),
      k_PHD3_HIF1_hydroxy_p2_n)
 
 
 #PHD1 hydroxylates HIF-1a at Proline 531
-Rule('PHD1_binds_HIF1_p2_in_nucleus', HIF1_nucleus(p2='u') + PHD1(hif_p=None) | HIF1_nucleus(p2=('u', 1)) % PHD1(hif_p=1),
+Rule('PHD1_binds_HIF1_p2_in_nucleus', HIF1(p2='u', loc='nuc') + PHD1(hif_p=None) | HIF1(p2=('u', 1), loc='nuc') % PHD1(hif_p=1),
      kf_PHD1_binds_HIF1_p2_n, kr_PHD1_binds_HIF1_p2_n)
 Rule('PHD1_hydroxy_HIF1_p2_in_nucleus', HIF1(p2=('u', 1)) % PHD1(hif_p=1) >> HIF1(p2='oh') + PHD1(hif_p=None),
      k_PHD1_HIF1_hydroxy_p2_n)
 
 #PHD1 hydroxylated HIF-1a at Proline 405
-Rule('PHD1_binds_HIF1_p1_in_nucleus', HIF1_nucleus(p1='u') + PHD1(hif_p=None) | HIF1_nucleus(p1=('u', 1)) % PHD1(hif_p=1),
+Rule('PHD1_binds_HIF1_p1_in_nucleus', HIF1(p1='u', loc='nuc') + PHD1(hif_p=None) | HIF1(p1=('u', 1), loc='nuc') % PHD1(hif_p=1),
      kf_PHD1_binds_HIF1_p1_n, kr_PHD1_binds_HIF1_p1_n)
 Rule('PHD1_hydroxy_HIF1_p1_in_nucleus', HIF1(p1=('u', 1)) % PHD1(hif_p=1) >> HIF1(p1='oh') + PHD1(hif_p=None),
      k_PHD1_HIF1_hydroxy_p1_n)
 
 #HIF-1 binding to PHD3 gene
-Rule('HIF1_binding_to_gene', HIF1_nucleus(a1 =('u', 1), gene = None) % p300(hif_a1=1) + PHD3_gene(prom=None) |
-     HIF1_nucleus(a1 =('u', 1), gene=1) % p300(hif_a1=1) % PHD3_gene(prom=1),
+Rule('HIF1_binding_to_gene', HIF1(a1 =('u', 1), gene = None, loc='nuc') % p300(hif_a1=1) + PHD3_gene(prom=None) |
+     HIF1(a1 =('u', 1), gene=2, loc='nuc') % p300(hif_a1=1) % PHD3_gene(prom=2),
      kf_HIF1_binds_PHD3_gene, kr_HIF1_binds_PHD3_gene)
 
 #VHL binds to HIF-1 with 1-OH on p2 and ubiquinates
-Rule('VHL_binds_HIF_1_p2_n', HIF1_nucleus(p2='oh') + VHL(hif_p=None) | HIF1_nucleus(p2=('oh', 1)) % VHL(hif_p=1),
+Rule('VHL_binds_HIF_1_p2_n', HIF1(p2='oh', loc='nuc') + VHL(hif_p=None) | HIF1(p2=('oh', 1), loc='nuc') % VHL(hif_p=1),
      kf_VHL_binds_HIF_1_p2_n, kr_VHL_binds_HIF_1_p2_n)
-Rule('VHL_ubiqu_HIF_1_p2_n',HIF1_nucleus(p2=('oh', 1)) % VHL(hif_p=1) >> HIF1_nucleus(p2 = 'ub') + VHL(hif_p=None),
+Rule('VHL_ubiqu_HIF_1_p2_n',HIF1(p2=('oh', 1), loc='nuc') % VHL(hif_p=1) >> HIF1(p2 = 'ub', loc='nuc') + VHL(hif_p=None),
      k_VHL_ubiq_HIF_1_p2_n)
 
 #VHL binds to HIF-1 with 1-OH on p1 and ubiquinates
-Rule('VHL_binds_HIF_1_p1_n', HIF1_nucleus(p1='oh') + VHL(hif_p=None) | HIF1_nucleus(p1=('oh', 1)) % VHL(hif_p=1),
+Rule('VHL_binds_HIF_1_p1_n', HIF1(p1='oh', loc='nuc') + VHL(hif_p=None) | HIF1(p1=('oh', 1), loc='nuc') % VHL(hif_p=1),
      kf_VHL_binds_HIF_1_p1_n, kr_VHL_binds_HIF_1_p1_n)
-Rule('VHL_ubiqu_HIF_1_p1_n',HIF1_nucleus(p1=('oh', 1)) % VHL(hif_p=1) >> HIF1_nucleus(p1 = 'ub') + VHL(hif_p=None),
+Rule('VHL_ubiqu_HIF_1_p1_n',HIF1(p1=('oh', 1), loc='nuc') % VHL(hif_p=1) >> HIF1(p1 = 'ub', loc='nuc') + VHL(hif_p=None),
      k_VHL_ubiq_HIF_1_p1_n)
 
 #HIF degrades after one ubiquination at p1
-Rule('HIF_1_p1_binds_proteosome_n', HIF1_nucleus(p1='ub') + proteosome(hif_p=None) | HIF1_nucleus(p1 =('ub', 1)) % VHL(hif_p=1),
+Rule('HIF_1_p1_binds_proteosome_n', HIF1(p1='ub', loc='nuc') + proteosome(hif_p=None) | HIF1(p1 =('ub', 1), loc='nuc') % VHL(hif_p=1),
     kf_HIF_1_p1_proteo_binding_n, kr_HIF_1_p1_proteo_binding_n)
-Rule('HIF_1_p1_degrades_n', HIF1_nucleus(p1 =('ub', 1)) % VHL(hif_p=1) >> VHL(hif_p=None),
+Rule('HIF_1_p1_degrades_n', HIF1(p1 =('ub', 1), loc='nuc') % VHL(hif_p=1) >> VHL(hif_p=None),
     k_HIF_1_p1_degrades_n)
 
 #HIF degrades after one ubiquination at p2
-Rule('HIF_1_p2_binds_proteosome_n', HIF1_nucleus(p2='ub') + proteosome(hif_p=None) | HIF1_nucleus(p2 =('ub', 1)) % VHL(hif_p=1),
+Rule('HIF_1_p2_binds_proteosome_n', HIF1(p2='ub', loc='nuc') + proteosome(hif_p=None) | HIF1(p2 =('ub', 1), loc='nuc') % VHL(hif_p=1),
     kf_HIF_1_p2_proteo_binding_n, kr_HIF_1_p2_proteo_binding_n)
-Rule('HIF_1_p2_degrades_n', HIF1_nucleus(p2 =('ub', 1)) % VHL(hif_p=1) >> VHL(hif_p=None),
+Rule('HIF_1_p2_degrades_n', HIF1(p2 =('ub', 1), loc='nuc') % VHL(hif_p=1) >> VHL(hif_p=None),
     k_HIF_1_p2_degrades_n)
 
 # Observables
