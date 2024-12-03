@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 Model()
 # Monomers
 
-Monomer('HIF1', ['p1', 'p2', 'a1', 'gene'],
+Monomer('HIF1', ['p1', 'p2', 'a1', 'g'],
         {'p1': ['u', 'oh', 'ub'], 'p2': ['u', 'oh', 'ub'], 'a1': ['u', 'oh']})
-Monomer('HIF2', ['p1','p2', 'a1','gene'],
+Monomer('HIF2', ['p1','p2', 'a1','g'],
         {'p1': ['u', 'oh', 'ub'], 'p2': ['u', 'oh', 'ub'], 'a1': ['u', 'oh']})
 Monomer('PHD1', ['hif_p'])
 Monomer('PHD2', ['hif_p'])
@@ -17,9 +17,9 @@ Monomer('FIH', ['hif_a1'])
 Monomer('VHL', ['hif_p'])
 Monomer('p300', ['hif_a1'])
 Monomer('proteosome', ['hif_p'])
-Monomer('HIF1_nucleus', ['p1','p2', 'a1','gene'],
+Monomer('HIF1_nucleus', ['p1','p2', 'a1','g'],
         {'p1': ['u', 'oh', 'ub'], 'p2': ['u', 'oh', 'ub'], 'a1': ['u', 'oh']})
-Monomer('HIF2_nucleus', ['p1','p2', 'a1','gene'],
+Monomer('HIF2_nucleus', ['p1','p2', 'a1','g'],
         {'p1': ['u', 'oh', 'ub'], 'p2': ['u', 'oh', 'ub'], 'a1': ['u', 'oh']})
 Monomer('Importer', ['hif'])
 Monomer('PHD3_nucleus', ['hif_p'])
@@ -186,9 +186,9 @@ Rule('PHD1_hydroxy_HIF2_p1_in_nucleus', HIF2(p1=('u', 1)) % PHD1(hif_p=1) >> HIF
      k_PHD1_HIF2_hydroxy_p1_n)
 
 #HIF-2 binding to PHD3 gene
-Rule('HIF2_binding_to_gene', HIF2_nucleus(a1 =('u', 1), gene = None) % p300(hif_a1=1) + PHD3_gene(prom=None) |
-     HIF2_nucleus(a1 =('u', 1), gene=1) % p300(hif_a1=1) % PHD3_gene(prom=1),
-     kf_HIF2_binds_PHD3_gene, kr_HIF2_binds_PHD3_gene
+Rule('HIF2_binding_to_gene', HIF2_nucleus(a1=('u', 1), g=None) % p300(hif_a1=1) + PHD3_gene(prom=None) |
+     HIF2_nucleus(a1=('u', 1), g=1) % p300(hif_a1=1) % PHD3_gene(prom=1),
+     kf_HIF2_binds_PHD3_gene, kr_HIF2_binds_PHD3_gene)
 
 #VHL binds to HIF-2 with 1-OH on p2 and ubiquinates
 Rule('VHL_binds_HIF_2_p2_n', HIF2_nucleus(p2='oh') + VHL(hif_p=None) | HIF2_nucleus(p2=('oh', 1)) % VHL(hif_p=1),
