@@ -165,7 +165,7 @@ Rule('HIF_2_enters_nucleus',HIF2(a1=('u', 1)) % Importer(hif=1) >> Importer(hif=
 Rule('HIF2_binds_p300', HIF2_nucleus(a1 = 'u') + p300(hif_a1=None) | HIF2_nucleus(a1 =('u', 1)) % p300(hif_a1=1),
      kf_HIF2_binds_p300, kr_HIF2_binds_p300)
 
-
+# Don't need because location
 #PHD3 hydroxylates HIF-2a at Proline 531
 Rule('PHD3_binds_HIF2_p2_in_nucleus', HIF2_nucleus(p2='u') + PHD3_nucleus(hif_p=None) | HIF2_nucleus(p2=('u', 1)) % PHD3_nucleus(hif_p=1),
      kf_PHD3_binds_HIF2_p2_n, kr_PHD3_binds_HIF2_p2_n)
