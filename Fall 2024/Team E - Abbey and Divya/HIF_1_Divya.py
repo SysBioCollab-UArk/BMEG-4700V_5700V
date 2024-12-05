@@ -342,8 +342,8 @@ Rule('HIF2_making_PHD3', HIF2(a1=('u', 1), gene=2, loc='nuc') % p300(hif_a1=1) %
 # Observables
 Observable('free_HIF1', HIF1(p1='u', p2='u', a1='u'))
 Observable('free_HIF2', HIF2(p1='u', p2='u', a1='u'))
-Observable('free_PHD1', PHD1(hif_p=None))
-Observable('free_PHD2', PHD2(hif_p=None))
+Observable('free_PHD1', PHD1())
+Observable('free_PHD2', PHD2())
 Observable('free_PHD3', PHD3(hif_p=None))
 # Observable('PHD2gene', PHD2_gene(prom=1))
 # Observable('PHD3gene', PHD3_gene(prom=1))
@@ -353,17 +353,17 @@ Observable('free_PHD3', PHD3(hif_p=None))
 
 tspan = np.linspace(0, 10, 11)
 sim = ScipyOdeSimulator(model, tspan, verbose=True)
-# result = sim.run()
-#
-# for obs in model.observables:
-#     print('plotting')
-#     plt.plot(tspan, result.observables[obs.name], lw=2, label=obs.name)
-#
-# plt.xlabel('time')
-# plt.ylabel('concentration')
-# plt.legend(loc=0)
-#
-# plt.show()
+result = sim.run()
+
+for obs in model.observables:
+    print('plotting')
+    plt.plot(tspan, result.observables[obs.name], lw=2, label=obs.name)
+
+plt.xlabel('time')
+plt.ylabel('concentration')
+plt.legend(loc=0)
+
+plt.show()
 
 
 
