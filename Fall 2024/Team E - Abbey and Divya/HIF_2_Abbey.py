@@ -216,3 +216,4 @@ Rule('HIF_2_p2_degrades_n', HIF2_nucleus(p2 =('ub', 1)) % VHL(hif_p=1) >> VHL(hi
 
 
 
+
