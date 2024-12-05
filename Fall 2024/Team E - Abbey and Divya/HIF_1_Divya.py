@@ -17,10 +17,6 @@ Monomer('FIH', ['hif_a1'])
 Monomer('VHL', ['hif_p'])
 Monomer('p300', ['hif_a1'])
 Monomer('proteosome', ['hif_p'])
-# Monomer('HIF1_nucleus', ['p1','p2', 'a1','gene'],
-#         {'p1': ['u', 'oh', 'ub'], 'p2': ['u', 'oh', 'ub'], 'a1': ['u', 'oh']})
-# Monomer('HIF2_nucleus', ['p1','p2', 'a1','gene'],
-#         {'p1': ['u', 'oh', 'ub'], 'p2': ['u', 'oh', 'ub'], 'a1': ['u', 'oh']})
 Monomer('Importer', ['hif'])
 Monomer('PHD3_nucleus', ['hif_p'])
 Monomer('PHD3_gene', ['prom'])
@@ -28,15 +24,15 @@ Monomer('PHD2_gene', ['prom'])
 
 
 # Initial Conditions
-Initial(HIF1(p1='u', p2='u', a1='u', loc='cyt', gene=None), Parameter('HIF1_0', 50))
-Initial(HIF2(p1='u', p2='u', a1='u', loc='cyt', gene=None), Parameter('HIF2_0', 50))
-Initial(PHD1(hif_p=None), Parameter('PHD1_0', 100))
+Initial(HIF1(p1='u', p2='u', a1='u', loc='cyt', gene=None), Parameter('HIF1_0', 100))
+Initial(HIF2(p1='u', p2='u', a1='u', loc='cyt', gene=None), Parameter('HIF2_0', 100))
+Initial(PHD1(hif_p=None), Parameter('PHD1_0', 10))
 Initial(PHD2(hif_p=None), Parameter('PHD2_0', 100))
-Initial(PHD3(hif_p=None), Parameter('PHD3_0', 100))
+Initial(PHD3(hif_p=None), Parameter('PHD3_0', 10))
 Initial(FIH(hif_a1=None), Parameter('FIH_0', 100))
 Initial(VHL(hif_p=None), Parameter('VHL_0', 100))
-Initial(p300(hif_a1=None), Parameter('p300_0', 50))
-Initial(proteosome(hif_p=None), Parameter('proteosome_0', 50))
+Initial(p300(hif_a1=None), Parameter('p300_0', 100))
+Initial(proteosome(hif_p=None), Parameter('proteosome_0', 100))
 Initial(Importer(hif=None), Parameter('importer_0', 50))
 Initial(PHD3_gene(prom=None), Parameter('PHD3_gene_0', 1))
 Initial(PHD2_gene(prom=None), Parameter('PHD2_gene_0', 1))
@@ -46,13 +42,9 @@ Parameter('kf_PHD3_binds_HIF1_p2', 1)
 Parameter('kr_PHD3_binds_HIF1_p2', 1)
 Parameter('k_PHD3_HIF1_hydroxy_p2', 1)
 
-Parameter('kf_PHD3_binds_HIF1_p1', 1)
-Parameter('kr_PHD3_binds_HIF1_p1', 1)
-Parameter('k_PHD3_HIF1_hydroxy_p1', 1)
-
-Parameter('kf_PHD2_binds_HIF1_p2', 1)
-Parameter('kr_PHD2_binds_HIF1_p2', 1)
-Parameter('k_PHD2_HIF1_hydroxy_p2', 1)
+Parameter('kf_PHD2_binds_HIF1_p2', 10)
+Parameter('kr_PHD2_binds_HIF1_p2', 10)
+Parameter('k_PHD2_HIF1_hydroxy_p2', 10)
 
 Parameter('kf_PHD2_binds_HIF1_p1', 1)
 Parameter('kr_PHD2_binds_HIF1_p1', 1)
@@ -89,9 +81,9 @@ Parameter('kf_PHD1_binds_HIF1_p2_n', 1)
 Parameter('kr_PHD1_binds_HIF1_p2_n', 1)
 Parameter('k_PHD1_HIF1_hydroxy_p2_n', 1)
 
-Parameter('kf_PHD1_binds_HIF1_p1_n', 1)
-Parameter('kr_PHD1_binds_HIF1_p1_n', 1)
-Parameter('k_PHD1_HIF1_hydroxy_p1_n', 1)
+Parameter('kf_PHD1_binds_HIF1_p1_n', 0.1)
+Parameter('kr_PHD1_binds_HIF1_p1_n', 0.1)
+Parameter('k_PHD1_HIF1_hydroxy_p1_n', 0.1)
 
 Parameter('kf_HIF1_binds_PHD3_gene', 1)
 Parameter('kr_HIF1_binds_PHD3_gene', 1)
@@ -100,27 +92,23 @@ Parameter('kf_HIF1_binds_PHD2_gene', 1)
 Parameter('kr_HIF1_binds_PHD2_gene', 1)
 
 Parameter('kf_hif1_PHD3_created', 1)
-Parameter('kr_hif1_PHD3_created', 1)
+#Parameter('kr_hif1_PHD3_created', 1)
 
 Parameter('kf_hif1_PHD2_created', 1)
-Parameter('kr_hif1_PHD2_created', 1)
+#Parameter('kr_hif1_PHD2_created', 1)
 
 # Parameters for HIF2 Pathway
-Parameter('kf_PHD3_binds_HIF2_p2', 1)
-Parameter('kr_PHD3_binds_HIF2_p2', 1)
-Parameter('k_PHD3_HIF2_hydroxy_p2', 1)
-
-Parameter('kf_PHD3_binds_HIF2_p1', 1)
-Parameter('kr_PHD3_binds_HIF2_p1', 1)
-Parameter('k_PHD3_HIF2_hydroxy_p1', 1)
+Parameter('kf_PHD3_binds_HIF2_p2', 10)
+Parameter('kr_PHD3_binds_HIF2_p2', 10)
+Parameter('k_PHD3_HIF2_hydroxy_p2', 10)
 
 Parameter('kf_PHD2_binds_HIF2_p2', 1)
 Parameter('kr_PHD2_binds_HIF2_p2', 1)
 Parameter('k_PHD2_HIF2_hydroxy_p2', 1)
 
-Parameter('kf_PHD2_binds_HIF2_p1', 1)
-Parameter('kr_PHD2_binds_HIF2_p1', 1)
-Parameter('k_PHD2_HIF2_hydroxy_p1', 1)
+Parameter('kf_PHD2_binds_HIF2_p1', 0.1)
+Parameter('kr_PHD2_binds_HIF2_p1', 0.1)
+Parameter('k_PHD2_HIF2_hydroxy_p1', 0.1)
 
 Parameter('kf_VHL_binds_HIF_2_p2', 1)
 Parameter('kr_VHL_binds_HIF_2_p2', 1)
@@ -149,9 +137,9 @@ Parameter('kf_HIF2_binds_importer', 1)
 Parameter('kr_HIF2_binds_importer', 1)
 Parameter('k_HIF2_enters_nucleus', 1)
 
-Parameter('kf_PHD1_binds_HIF2_p2_n', 1)
-Parameter('kr_PHD1_binds_HIF2_p2_n', 1)
-Parameter('k_PHD1_HIF2_hydroxy_p2_n', 1)
+Parameter('kf_PHD1_binds_HIF2_p2_n', 10)
+Parameter('kr_PHD1_binds_HIF2_p2_n', 10)
+Parameter('k_PHD1_HIF2_hydroxy_p2_n', 10)
 
 Parameter('kf_PHD1_binds_HIF2_p1_n', 1)
 Parameter('kr_PHD1_binds_HIF2_p1_n', 1)
@@ -161,7 +149,7 @@ Parameter('kf_HIF2_binds_PHD3_gene', 1)
 Parameter('kr_HIF2_binds_PHD3_gene', 1)
 
 Parameter('kf_hif2_PHD3_created', 1)
-Parameter('kr_hif2_PHD3_created', 1)
+#Parameter('kr_hif2_PHD3_created', 1)
 
 # Rules for HIF1
 
@@ -246,14 +234,14 @@ Rule('HIF1_binding_to_gene_PHD2', HIF1(a1 =('u', 1), gene = None, loc='nuc') % p
      kf_HIF1_binds_PHD2_gene, kr_HIF1_binds_PHD2_gene)
 
 # HIF1 - PHD3 gene making a protein
-Rule('HIF1_making_PHD3', HIF1(a1=('u', 1), gene=2, loc='nuc') % p300(hif_a1=1) % PHD3_gene(prom=2) |
+Rule('HIF1_making_PHD3', HIF1(a1=('u', 1), gene=2, loc='nuc') % p300(hif_a1=1) % PHD3_gene(prom=2) >>
      HIF1(a1=('u', 1), gene=2, loc='nuc') % p300(hif_a1=1) % PHD3_gene(prom=2) + PHD3(hif_p=None),
-     kf_hif1_PHD3_created, kr_hif1_PHD3_created)
+     kf_hif1_PHD3_created)
 
 # HIF1 - PHD2 gene making a protein
-Rule('HIF1_making_PHD2', HIF1(a1=('u', 1), gene=2, loc='nuc') % p300(hif_a1=1) % PHD2_gene(prom=2) |
+Rule('HIF1_making_PHD2', HIF1(a1=('u', 1), gene=2, loc='nuc') % p300(hif_a1=1) % PHD2_gene(prom=2) >>
      HIF1(a1=('u', 1), gene=2, loc='nuc') % p300(hif_a1=1) % PHD2_gene(prom=2) + PHD2(hif_p=None),
-     kf_hif1_PHD2_created, kr_hif1_PHD2_created)
+     kf_hif1_PHD2_created)
 
 
 
@@ -334,24 +322,22 @@ Rule('HIF2_binding_to_gene', HIF2(a1=('u', 1), gene=None, loc='nuc') % p300(hif_
      kf_HIF2_binds_PHD3_gene, kr_HIF2_binds_PHD3_gene)
 
 # HIF2 - PHD3 gene making a protein
-Rule('HIF2_making_PHD3', HIF2(a1=('u', 1), gene=2, loc='nuc') % p300(hif_a1=1) % PHD3_gene(prom=2) |
+Rule('HIF2_making_PHD3', HIF2(a1=('u', 1), gene=2, loc='nuc') % p300(hif_a1=1) % PHD3_gene(prom=2) >>
      HIF2(a1=('u', 1), gene=2, loc='nuc') % p300(hif_a1=1) % PHD3_gene(prom=2) + PHD3(hif_p=None),
-     kf_hif2_PHD3_created, kr_hif2_PHD3_created)
+     kf_hif2_PHD3_created)
 
 
 # Observables
-Observable('free_HIF1', HIF1(p1='u', p2='u', a1='u'))
-Observable('free_HIF2', HIF2(p1='u', p2='u', a1='u'))
+Observable('free_HIF1', HIF1())
+Observable('free_HIF2', HIF2())
 Observable('free_PHD1', PHD1())
 Observable('free_PHD2', PHD2())
-Observable('free_PHD3', PHD3(hif_p=None))
-# Observable('PHD2gene', PHD2_gene(prom=1))
-# Observable('PHD3gene', PHD3_gene(prom=1))
+Observable('free_PHD3', PHD3())
 
 
 # Simulation Commands
 
-tspan = np.linspace(0, 10, 11)
+tspan = np.linspace(0, 100 , 301)
 sim = ScipyOdeSimulator(model, tspan, verbose=True)
 result = sim.run()
 
