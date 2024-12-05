@@ -30,138 +30,138 @@ Monomer('PHD2_gene', ['prom'])
 # Initial Conditions
 Initial(HIF1(p1='u', p2='u', a1='u', loc='cyt', gene=None), Parameter('HIF1_0', 50))
 Initial(HIF2(p1='u', p2='u', a1='u', loc='cyt', gene=None), Parameter('HIF2_0', 50))
-Initial(PHD1(hif_p=None), Parameter('PHD1_0', 50))
-Initial(PHD2(hif_p=None), Parameter('PHD2_0', 50))
-Initial(PHD3(hif_p=None), Parameter('PHD3_0', 50))
-Initial(FIH(hif_a1=None), Parameter('FIH_0', 50))
-Initial(VHL(hif_p=None), Parameter('VHL_0', 50))
+Initial(PHD1(hif_p=None), Parameter('PHD1_0', 100))
+Initial(PHD2(hif_p=None), Parameter('PHD2_0', 100))
+Initial(PHD3(hif_p=None), Parameter('PHD3_0', 100))
+Initial(FIH(hif_a1=None), Parameter('FIH_0', 100))
+Initial(VHL(hif_p=None), Parameter('VHL_0', 100))
 Initial(p300(hif_a1=None), Parameter('p300_0', 50))
 Initial(proteosome(hif_p=None), Parameter('proteosome_0', 50))
 Initial(Importer(hif=None), Parameter('importer_0', 50))
-Initial(PHD3_gene(prom=None), Parameter('PHD3_gene_0', 50))
-Initial(PHD2_gene(prom=None), Parameter('PHD2_gene_0', 50))
+Initial(PHD3_gene(prom=None), Parameter('PHD3_gene_0', 1))
+Initial(PHD2_gene(prom=None), Parameter('PHD2_gene_0', 1))
 
 # Parameters for HIF1 pathway
-Parameter('kf_PHD3_binds_HIF1_p2')
-Parameter('kr_PHD3_binds_HIF1_p2')
-Parameter('k_PHD3_HIF1_hydroxy_p2')
+Parameter('kf_PHD3_binds_HIF1_p2', 1)
+Parameter('kr_PHD3_binds_HIF1_p2', 1)
+Parameter('k_PHD3_HIF1_hydroxy_p2', 1)
 
-Parameter('kf_PHD3_binds_HIF1_p1')
-Parameter('kr_PHD3_binds_HIF1_p1')
-Parameter('k_PHD3_HIF1_hydroxy_p1')
+Parameter('kf_PHD3_binds_HIF1_p1', 1)
+Parameter('kr_PHD3_binds_HIF1_p1', 1)
+Parameter('k_PHD3_HIF1_hydroxy_p1', 1)
 
-Parameter('kf_PHD2_binds_HIF1_p2')
-Parameter('kr_PHD2_binds_HIF1_p2')
-Parameter('k_PHD2_HIF1_hydroxy_p2')
+Parameter('kf_PHD2_binds_HIF1_p2', 1)
+Parameter('kr_PHD2_binds_HIF1_p2', 1)
+Parameter('k_PHD2_HIF1_hydroxy_p2', 1)
 
-Parameter('kf_PHD2_binds_HIF1_p1')
-Parameter('kr_PHD2_binds_HIF1_p1')
-Parameter('k_PHD2_HIF1_hydroxy_p1')
+Parameter('kf_PHD2_binds_HIF1_p1', 1)
+Parameter('kr_PHD2_binds_HIF1_p1', 1)
+Parameter('k_PHD2_HIF1_hydroxy_p1', 1)
 
-Parameter('kf_VHL_binds_HIF_1_p2')
-Parameter('kr_VHL_binds_HIF_1_p2')
-Parameter('k_VHL_ubiq_HIF_1_p2')
+Parameter('kf_VHL_binds_HIF_1_p2', 1)
+Parameter('kr_VHL_binds_HIF_1_p2', 1)
+Parameter('k_VHL_ubiq_HIF_1_p2', 1)
 
-Parameter('kf_VHL_binds_HIF_1_p1')
-Parameter('kr_VHL_binds_HIF_1_p1')
-Parameter('k_VHL_ubiq_HIF_1_p1')
+Parameter('kf_VHL_binds_HIF_1_p1', 1)
+Parameter('kr_VHL_binds_HIF_1_p1', 1)
+Parameter('k_VHL_ubiq_HIF_1_p1', 1)
 
-Parameter('kf_HIF_1_p1_proteo_binding')
-Parameter('kr_HIF_1_p1_proteo_binding')
-Parameter('k_HIF_1_p1_degrades')
+Parameter('kf_HIF_1_p1_proteo_binding', 1)
+Parameter('kr_HIF_1_p1_proteo_binding', 1)
+Parameter('k_HIF_1_p1_degrades', 1)
 
-Parameter('kf_HIF_1_p2_proteo_binding')
-Parameter('kr_HIF_1_p2_proteo_binding')
-Parameter('k_HIF_1_p2_degrades')
+Parameter('kf_HIF_1_p2_proteo_binding', 1)
+Parameter('kr_HIF_1_p2_proteo_binding', 1)
+Parameter('k_HIF_1_p2_degrades', 1)
 
-Parameter('kf_HIF1_binds_FIH')
-Parameter('kr_HIF1_binds_FIH')
-Parameter('k_HIF_1_hydroxylated_at_a1')
+Parameter('kf_HIF1_binds_FIH', 1)
+Parameter('kr_HIF1_binds_FIH', 1)
+Parameter('k_HIF_1_hydroxylated_at_a1', 1)
 
-Parameter('kf_HIF1_binds_p300')
-Parameter('kr_HIF1_binds_p300')
+Parameter('kf_HIF1_binds_p300', 1)
+Parameter('kr_HIF1_binds_p300', 1)
 
-Parameter('kf_HIF1_binds_importer')
-Parameter('kr_HIF1_binds_importer')
-Parameter('k_HIF1_enters_nucleus')
+Parameter('kf_HIF1_binds_importer', 1)
+Parameter('kr_HIF1_binds_importer', 1)
+Parameter('k_HIF1_enters_nucleus', 1)
 
-Parameter('kf_PHD1_binds_HIF1_p2_n')
-Parameter('kr_PHD1_binds_HIF1_p2_n')
-Parameter('k_PHD1_HIF1_hydroxy_p2_n')
+Parameter('kf_PHD1_binds_HIF1_p2_n', 1)
+Parameter('kr_PHD1_binds_HIF1_p2_n', 1)
+Parameter('k_PHD1_HIF1_hydroxy_p2_n', 1)
 
-Parameter('kf_PHD1_binds_HIF1_p1_n')
-Parameter('kr_PHD1_binds_HIF1_p1_n')
-Parameter('k_PHD1_HIF1_hydroxy_p1_n')
+Parameter('kf_PHD1_binds_HIF1_p1_n', 1)
+Parameter('kr_PHD1_binds_HIF1_p1_n', 1)
+Parameter('k_PHD1_HIF1_hydroxy_p1_n', 1)
 
-Parameter('kf_HIF1_binds_PHD3_gene')
-Parameter('kr_HIF1_binds_PHD3_gene')
+Parameter('kf_HIF1_binds_PHD3_gene', 1)
+Parameter('kr_HIF1_binds_PHD3_gene', 1)
 
-Parameter('kf_HIF1_binds_PHD2_gene')
-Parameter('kr_HIF1_binds_PHD2_gene')
+Parameter('kf_HIF1_binds_PHD2_gene', 1)
+Parameter('kr_HIF1_binds_PHD2_gene', 1)
 
-Parameter('kf_hif1_PHD3_created')
-Parameter('kr_hif1_PHD3_created')
+Parameter('kf_hif1_PHD3_created', 1)
+Parameter('kr_hif1_PHD3_created', 1)
 
-Parameter('kf_hif1_PHD2_created')
-Parameter('kr_hif1_PHD2_created')
+Parameter('kf_hif1_PHD2_created', 1)
+Parameter('kr_hif1_PHD2_created', 1)
 
 # Parameters for HIF2 Pathway
-Parameter('kf_PHD3_binds_HIF2_p2')
-Parameter('kr_PHD3_binds_HIF2_p2')
-Parameter('k_PHD3_HIF2_hydroxy_p2')
+Parameter('kf_PHD3_binds_HIF2_p2', 1)
+Parameter('kr_PHD3_binds_HIF2_p2', 1)
+Parameter('k_PHD3_HIF2_hydroxy_p2', 1)
 
-Parameter('kf_PHD3_binds_HIF2_p1')
-Parameter('kr_PHD3_binds_HIF2_p1')
-Parameter('k_PHD3_HIF2_hydroxy_p1')
+Parameter('kf_PHD3_binds_HIF2_p1', 1)
+Parameter('kr_PHD3_binds_HIF2_p1', 1)
+Parameter('k_PHD3_HIF2_hydroxy_p1', 1)
 
-Parameter('kf_PHD2_binds_HIF2_p2')
-Parameter('kr_PHD2_binds_HIF2_p2')
-Parameter('k_PHD2_HIF2_hydroxy_p2')
+Parameter('kf_PHD2_binds_HIF2_p2', 1)
+Parameter('kr_PHD2_binds_HIF2_p2', 1)
+Parameter('k_PHD2_HIF2_hydroxy_p2', 1)
 
-Parameter('kf_PHD2_binds_HIF2_p1')
-Parameter('kr_PHD2_binds_HIF2_p1')
-Parameter('k_PHD2_HIF2_hydroxy_p1')
+Parameter('kf_PHD2_binds_HIF2_p1', 1)
+Parameter('kr_PHD2_binds_HIF2_p1', 1)
+Parameter('k_PHD2_HIF2_hydroxy_p1', 1)
 
-Parameter('kf_VHL_binds_HIF_2_p2')
-Parameter('kr_VHL_binds_HIF_2_p2')
-Parameter('k_VHL_ubiq_HIF_2_p2')
+Parameter('kf_VHL_binds_HIF_2_p2', 1)
+Parameter('kr_VHL_binds_HIF_2_p2', 1)
+Parameter('k_VHL_ubiq_HIF_2_p2', 1)
 
-Parameter('kf_VHL_binds_HIF_2_p1')
-Parameter('kr_VHL_binds_HIF_2_p1')
-Parameter('k_VHL_ubiq_HIF_2_p1')
+Parameter('kf_VHL_binds_HIF_2_p1', 1)
+Parameter('kr_VHL_binds_HIF_2_p1', 1)
+Parameter('k_VHL_ubiq_HIF_2_p1', 1)
 
-Parameter('kf_HIF_2_p1_proteo_binding')
-Parameter('kr_HIF_2_p1_proteo_binding')
-Parameter('k_HIF_2_p1_degrades')
+Parameter('kf_HIF_2_p1_proteo_binding', 1)
+Parameter('kr_HIF_2_p1_proteo_binding', 1)
+Parameter('k_HIF_2_p1_degrades', 1)
 
-Parameter('kf_HIF_2_p2_proteo_binding')
-Parameter('kr_HIF_2_p2_proteo_binding')
-Parameter('k_HIF_2_p2_degrades')
+Parameter('kf_HIF_2_p2_proteo_binding', 1)
+Parameter('kr_HIF_2_p2_proteo_binding', 1)
+Parameter('k_HIF_2_p2_degrades', 1)
 
-Parameter('kf_HIF2_binds_FIH')
-Parameter('kr_HIF2_binds_FIH')
-Parameter('k_HIF_2_hydroxylated_at_a1')
+Parameter('kf_HIF2_binds_FIH', 1)
+Parameter('kr_HIF2_binds_FIH', 1)
+Parameter('k_HIF_2_hydroxylated_at_a1', 1)
 
-Parameter('kf_HIF2_binds_p300')
-Parameter('kr_HIF2_binds_p300')
+Parameter('kf_HIF2_binds_p300', 1)
+Parameter('kr_HIF2_binds_p300', 1)
 
-Parameter('kf_HIF2_binds_importer')
-Parameter('kr_HIF2_binds_importer')
-Parameter('k_HIF2_enters_nucleus')
+Parameter('kf_HIF2_binds_importer', 1)
+Parameter('kr_HIF2_binds_importer', 1)
+Parameter('k_HIF2_enters_nucleus', 1)
 
-Parameter('kf_PHD1_binds_HIF2_p2_n')
-Parameter('kr_PHD1_binds_HIF2_p2_n')
-Parameter('k_PHD1_HIF2_hydroxy_p2_n')
+Parameter('kf_PHD1_binds_HIF2_p2_n', 1)
+Parameter('kr_PHD1_binds_HIF2_p2_n', 1)
+Parameter('k_PHD1_HIF2_hydroxy_p2_n', 1)
 
-Parameter('kf_PHD1_binds_HIF2_p1_n')
-Parameter('kr_PHD1_binds_HIF2_p1_n')
-Parameter('k_PHD1_HIF2_hydroxy_p1_n')
+Parameter('kf_PHD1_binds_HIF2_p1_n', 1)
+Parameter('kr_PHD1_binds_HIF2_p1_n', 1)
+Parameter('k_PHD1_HIF2_hydroxy_p1_n', 1)
 
-Parameter('kf_HIF2_binds_PHD3_gene')
-Parameter('kr_HIF2_binds_PHD3_gene')
+Parameter('kf_HIF2_binds_PHD3_gene', 1)
+Parameter('kr_HIF2_binds_PHD3_gene', 1)
 
-Parameter('kf_hif2_PHD3_created')
-Parameter('kr_hif2_PHD3_created')
+Parameter('kf_hif2_PHD3_created', 1)
+Parameter('kr_hif2_PHD3_created', 1)
 
 # Rules for HIF1
 
@@ -217,13 +217,13 @@ Rule('HIF_1_hydroxylated_at_a1', HIF1(a1 =('u', 1), loc='cyt') % FIH(hif_a1=1) >
 Rule('HIF_1_binds_importer', HIF1(a1 = 'u', loc='cyt') + Importer(hif=None) | HIF1(a1=('u', 1), loc='cyt') % Importer(hif=1),
      kf_HIF1_binds_importer, kr_HIF1_binds_importer)
 Rule('HIF_1_enters_nucleus',HIF1(a1=('u', 1), loc='cyt') % Importer(hif=1) >> Importer(hif=None) + HIF1(a1='u', loc='nuc'),
-     k_HIF1_enters_nucleus)
+      k_HIF1_enters_nucleus)
 
 #p300 interacts with HIF-1_nucleus
 Rule('HIF1_binds_p300', HIF1(a1 = 'u', loc='nuc') + p300(hif_a1=None) | HIF1(a1 =('u', 1), loc='nuc') % p300(hif_a1=1),
      kf_HIF1_binds_p300, kr_HIF1_binds_p300)
 
-#PHD1 hydroxylates HIF-1a at Proline 564
+# #PHD1 hydroxylates HIF-1a at Proline 564
 Rule('PHD1_binds_HIF1_p2_in_nucleus', HIF1(p2='u', loc='nuc') + PHD1(hif_p=None) | HIF1(p2=('u', 1), loc='nuc') % PHD1(hif_p=1),
      kf_PHD1_binds_HIF1_p2_n, kr_PHD1_binds_HIF1_p2_n)
 Rule('PHD1_hydroxy_HIF1_p2_in_nucleus', HIF1(p2=('u', 1), loc='nuc') % PHD1(hif_p=1) >> HIF1(p2='oh', loc='nuc') + PHD1(hif_p=None),
@@ -341,25 +341,29 @@ Rule('HIF2_making_PHD3', HIF2(a1=('u', 1), gene=2, loc='nuc') % p300(hif_a1=1) %
 
 # Observables
 Observable('free_HIF1', HIF1(p1='u', p2='u', a1='u'))
-Observable('degradation', proteosome(hif_p=None))
-Observable('p300_binding', p300(hif_a1=None))
+Observable('free_HIF2', HIF2(p1='u', p2='u', a1='u'))
+Observable('free_PHD1', PHD1(hif_p=None))
+Observable('free_PHD2', PHD2(hif_p=None))
+Observable('free_PHD3', PHD3(hif_p=None))
+# Observable('PHD2gene', PHD2_gene(prom=1))
+# Observable('PHD3gene', PHD3_gene(prom=1))
 
 
 # Simulation Commands
 
-tspan = np.linspace(0, 30, 301)
+tspan = np.linspace(0, 10, 11)
 sim = ScipyOdeSimulator(model, tspan, verbose=True)
-result = sim.run()
-
-for obs in model.observables:
-    print('plotting')
-    plt.plot(tspan, result.observables[obs.name], lw=2, label=obs.name)
-
-plt.xlabel('time')
-plt.ylabel('concentration')
-plt.legend(loc=0)
-
-plt.show()
+# result = sim.run()
+#
+# for obs in model.observables:
+#     print('plotting')
+#     plt.plot(tspan, result.observables[obs.name], lw=2, label=obs.name)
+#
+# plt.xlabel('time')
+# plt.ylabel('concentration')
+# plt.legend(loc=0)
+#
+# plt.show()
 
 
 
