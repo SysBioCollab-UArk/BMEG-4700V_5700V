@@ -174,25 +174,25 @@ Rule('PHD2_hydroxy_HIF1_p1', HIF1(p1=('u', 1), loc='cyt') % PHD2(hif_p=1) >> HIF
 #VHL binds to HIF-1 with 1-OH on p2 and ubiquinates
 Rule('VHL_binds_HIF_1_p2', HIF1(p2='oh') + VHL(hif_p=None) | HIF1(p2=('oh', 1)) % VHL(hif_p=1),
      kf_VHL_binds_HIF_1_p2, kr_VHL_binds_HIF_1_p2)
-Rule('VHL_ubiqu_HIF_1_p2',HIF1(p2=('oh', 1)) % VHL(hif_p=1) >> HIF1(p2 = 'ub') + VHL(hif_p=None),
+Rule('VHL_ubiqu_HIF_1_p2',HIF1(p2=('oh', 1)) % VHL(hif_p=1) >> HIF1(p2='ub') + VHL(hif_p=None),
      k_VHL_ubiq_HIF_1_p2)
 
 #VHL binds to HIF-1 with 1-OH on p1 and ubiquinates
 Rule('VHL_binds_HIF_1_p1', HIF1(p1='oh') + VHL(hif_p=None) | HIF1(p1=('oh', 1)) % VHL(hif_p=1),
      kf_VHL_binds_HIF_1_p1, kr_VHL_binds_HIF_1_p1)
-Rule('VHL_ubiqu_HIF_1_p1',HIF1(p1=('oh', 1)) % VHL(hif_p=1) >> HIF1(p1 = 'ub') + VHL(hif_p=None),
+Rule('VHL_ubiqu_HIF_1_p1',HIF1(p1=('oh', 1)) % VHL(hif_p=1) >> HIF1(p1 ='ub') + VHL(hif_p=None),
      k_VHL_ubiq_HIF_1_p1)
 
 #HIF degrades after one ubiquination at p1
-Rule('HIF_1_p1_binds_proteosome', HIF1(p1='ub') + proteosome(hif_p=None) | HIF1(p1 =('ub', 1)) % VHL(hif_p=1),
+Rule('HIF_1_p1_binds_proteosome', HIF1(p1='ub') + proteosome(hif_p=None) | HIF1(p1 =('ub', 1)) % proteosome(hif_p=1),
     kf_HIF_1_p1_proteo_binding, kr_HIF_1_p1_proteo_binding)
-Rule('HIF_1_p1_degrades', HIF1(p1 =('ub', 1)) % VHL(hif_p=1) >> VHL(hif_p=None),
+Rule('HIF_1_p1_degrades', HIF1(p1 =('ub', 1)) % proteosome(hif_p=1) >> proteosome(hif_p=None),
     k_HIF_1_p1_degrades)
 
 #HIF degrades after one ubiquination at p2
-Rule('HIF_1_p2_binds_proteosome', HIF1(p2='ub') + proteosome(hif_p=None) | HIF1(p2 =('ub', 1)) % VHL(hif_p=1),
+Rule('HIF_1_p2_binds_proteosome', HIF1(p2='ub') + proteosome(hif_p=None) | HIF1(p2 =('ub', 1)) % proteosome(hif_p=1),
     kf_HIF_1_p2_proteo_binding, kr_HIF_1_p2_proteo_binding)
-Rule('HIF_1_p2_degrades', HIF1(p2 =('ub', 1)) % VHL(hif_p=1) >> VHL(hif_p=None),
+Rule('HIF_1_p2_degrades', HIF1(p2 =('ub', 1)) % proteosome(hif_p=1) >> proteosome(hif_p=None),
     k_HIF_1_p2_degrades)
 
 #FIH hydroxylates HIF-1 at a1 site
@@ -211,7 +211,7 @@ Rule('HIF_1_enters_nucleus',HIF1(a1=('u', 1), loc='cyt') % Importer(hif=1) >> Im
 Rule('HIF1_binds_p300', HIF1(a1 = 'u', loc='nuc') + p300(hif_a1=None) | HIF1(a1 =('u', 1), loc='nuc') % p300(hif_a1=1),
      kf_HIF1_binds_p300, kr_HIF1_binds_p300)
 
-# #PHD1 hydroxylates HIF-1a at Proline 564
+#PHD1 hydroxylates HIF-1a at Proline 564
 Rule('PHD1_binds_HIF1_p2_in_nucleus', HIF1(p2='u', loc='nuc') + PHD1(hif_p=None) | HIF1(p2=('u', 1), loc='nuc') % PHD1(hif_p=1),
      kf_PHD1_binds_HIF1_p2_n, kr_PHD1_binds_HIF1_p2_n)
 Rule('PHD1_hydroxy_HIF1_p2_in_nucleus', HIF1(p2=('u', 1), loc='nuc') % PHD1(hif_p=1) >> HIF1(p2='oh', loc='nuc') + PHD1(hif_p=None),
@@ -224,13 +224,13 @@ Rule('PHD1_hydroxy_HIF1_p1_in_nucleus', HIF1(p1=('u', 1), loc='nuc') % PHD1(hif_
      k_PHD1_HIF1_hydroxy_p1_n)
 
 #HIF-1 binding to PHD3 gene
-Rule('HIF1_binding_to_gene_PHD3', HIF1(a1 =('u', 1), gene = None, loc='nuc') % p300(hif_a1=1) + PHD3_gene(prom=None) |
+Rule('HIF1_binding_to_gene_PHD3', HIF1(a1 =('u', 1), gene=None, loc='nuc') % p300(hif_a1=1) + PHD3_gene(prom=None) |
      HIF1(a1 =('u', 1), gene=2, loc='nuc') % p300(hif_a1=1) % PHD3_gene(prom=2),
      kf_HIF1_binds_PHD3_gene, kr_HIF1_binds_PHD3_gene)
 
 #HIF-1 binding to PHD2 gene
-Rule('HIF1_binding_to_gene_PHD2', HIF1(a1 =('u', 1), gene = None, loc='nuc') % p300(hif_a1=1) + PHD2_gene(prom=None) |
-     HIF1(a1 =('u', 1), gene=2, loc='nuc') % p300(hif_a1=1) % PHD2_gene(prom=2),
+Rule('HIF1_binding_to_gene_PHD2', HIF1(a1 =('u', 1), gene=None, loc='nuc') % p300(hif_a1=1) + PHD2_gene(prom=None) |
+     HIF1(a1=('u', 1), gene=2, loc='nuc') % p300(hif_a1=1) % PHD2_gene(prom=2),
      kf_HIF1_binds_PHD2_gene, kr_HIF1_binds_PHD2_gene)
 
 # HIF1 - PHD3 gene making a protein
@@ -277,15 +277,15 @@ Rule('VHL_ubiqu_HIF_2_p1',HIF2(p1=('oh', 1)) % VHL(hif_p=1) >> HIF2(p1 = 'ub') +
      k_VHL_ubiq_HIF_2_p1)
 
 #HIF degrades after one ubiquination at p1
-Rule('HIF_2_p1_binds_proteosome', HIF2(p1='ub') + proteosome(hif_p=None) | HIF2(p1 =('ub', 1)) % VHL(hif_p=1),
+Rule('HIF_2_p1_binds_proteosome', HIF2(p1='ub') + proteosome(hif_p=None) | HIF2(p1 =('ub', 1)) % proteosome(hif_p=1),
     kf_HIF_2_p1_proteo_binding, kr_HIF_2_p1_proteo_binding)
-Rule('HIF_2_p1_degrades', HIF2(p1 =('ub', 1)) % VHL(hif_p=1) >> VHL(hif_p=None),
+Rule('HIF_2_p1_degrades', HIF2(p1 =('ub', 1)) % proteosome(hif_p=1) >> proteosome(hif_p=None),
     k_HIF_2_p1_degrades)
 
 #HIF degrades after one ubiquination at p2
-Rule('HIF_2_p2_binds_proteosome', HIF2(p2='ub') + proteosome(hif_p=None) | HIF2(p2 =('ub', 1)) % VHL(hif_p=1),
+Rule('HIF_2_p2_binds_proteosome', HIF2(p2='ub') + proteosome(hif_p=None) | HIF2(p2 =('ub', 1)) % proteosome(hif_p=1),
     kf_HIF_2_p2_proteo_binding, kr_HIF_2_p2_proteo_binding)
-Rule('HIF_2_p2_degrades', HIF2(p2 =('ub', 1)) % VHL(hif_p=1) >> VHL(hif_p=None),
+Rule('HIF_2_p2_degrades', HIF2(p2 =('ub', 1)) % proteosome(hif_p=1) >> proteosome(hif_p=None),
     k_HIF_2_p2_degrades)
 
 #FIH hydroxylates HIF-2 at a1 site
@@ -328,16 +328,14 @@ Rule('HIF2_making_PHD3', HIF2(a1=('u', 1), gene=2, loc='nuc') % p300(hif_a1=1) %
 
 
 # Observables
-Observable('free_HIF1', HIF1())
-Observable('free_HIF2', HIF2())
-Observable('free_PHD1', PHD1())
-Observable('free_PHD2', PHD2())
-Observable('free_PHD3', PHD3())
+Observable('a1_HIF', HIF1(a1 ='u', loc='nuc'))
+Observable('a1_bound_HIF', HIF1(a1=('u',1), loc='nuc') % p300(hif_a1=1))
+
 
 
 # Simulation Commands
 
-tspan = np.linspace(0, 100 , 301)
+tspan = np.linspace(0, 300 , 301)
 sim = ScipyOdeSimulator(model, tspan, verbose=True)
 result = sim.run()
 
