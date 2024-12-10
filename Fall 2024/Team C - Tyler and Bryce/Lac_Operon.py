@@ -8,13 +8,32 @@ from boolean2 import Model
 #
 text = """
 Glucose = False
-B = False
-C = False
-D = True
+PTS = False
+AC = False
+cAMP = False
+CAP = False
+Laci = False
+LacZYA = True
+LacZYA_MRNA = False
+LacZ = False
+LacY = False
+LacA = Flase
+Allolactose = False
+Lactose_int = False
+Lactose_ex = True
 
-B* = A or C
-C* = A and not D
-D* = B and C
+
+PTS* = Glucose
+AC* = Not PTS
+cAMP* = AC
+CAP* = cAMP
+Laci* = Not Allolactose
+LacZYA_MRNA* = CAP and lacZYA and not Laci
+LacZ* = LacZYA_MRNA
+LacY* = LacZYA_MRNA
+LacA* = LacZYA_MRNA
+Allolactose* = LacZ and Lactose_int
+Lactose_int* = LacY and Lactose_ex and not PTS
 """
 
 model = Model( text=text, mode='sync')
