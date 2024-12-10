@@ -26,9 +26,9 @@ Monomer('PHD2_gene', ['prom'])
 # Initial Conditions
 Initial(HIF1(p1='u', p2='u', a1='u', loc='cyt', gene=None), Parameter('HIF1_0', 100))
 Initial(HIF2(p1='u', p2='u', a1='u', loc='cyt', gene=None), Parameter('HIF2_0', 100))
-Initial(PHD1(hif_p=None), Parameter('PHD1_0', 10))
-Initial(PHD2(hif_p=None), Parameter('PHD2_0', 100))
-Initial(PHD3(hif_p=None), Parameter('PHD3_0', 10))
+Initial(PHD1(hif_p=None), Parameter('PHD1_0', .1))
+Initial(PHD2(hif_p=None), Parameter('PHD2_0', 1))
+Initial(PHD3(hif_p=None), Parameter('PHD3_0', .1))
 Initial(FIH(hif_a1=None), Parameter('FIH_0', 100))
 Initial(VHL(hif_p=None), Parameter('VHL_0', 100))
 Initial(p300(hif_a1=None), Parameter('p300_0', 100))
@@ -76,6 +76,7 @@ Parameter('kr_HIF1_binds_p300', 1)
 Parameter('kf_HIF1_binds_importer', 1)
 Parameter('kr_HIF1_binds_importer', 1)
 Parameter('k_HIF1_enters_nucleus', 1)
+Parameter('k_HIF1_leaving_nucleus',1)
 
 Parameter('kf_PHD1_binds_HIF1_p2_n', 1)
 Parameter('kr_PHD1_binds_HIF1_p2_n', 1)
@@ -136,6 +137,8 @@ Parameter('kr_HIF2_binds_p300', 1)
 Parameter('kf_HIF2_binds_importer', 1)
 Parameter('kr_HIF2_binds_importer', 1)
 Parameter('k_HIF2_enters_nucleus', 1)
+Parameter('k_HIF2_leaving_nucleus',1)
+
 
 Parameter('kf_PHD1_binds_HIF2_p2_n', 10)
 Parameter('kr_PHD1_binds_HIF2_p2_n', 10)
@@ -202,10 +205,14 @@ Rule('HIF_1_hydroxylated_at_a1', HIF1(a1 =('u', 1), loc='cyt') % FIH(hif_a1=1) >
      k_HIF_1_hydroxylated_at_a1)
 
 #Representing the HIF-1 protein entering the nucleus
-Rule('HIF_1_binds_importer', HIF1(a1 = 'u', loc='cyt') + Importer(hif=None) | HIF1(a1=('u', 1), loc='cyt') % Importer(hif=1),
+Rule('HIF_1_binds_importer', HIF1(a1 = 'u') + Importer(hif=None) | HIF1(a1=('u', 1)) % Importer(hif=1),
      kf_HIF1_binds_importer, kr_HIF1_binds_importer)
 Rule('HIF_1_enters_nucleus',HIF1(a1=('u', 1), loc='cyt') % Importer(hif=1) >> Importer(hif=None) + HIF1(a1='u', loc='nuc'),
       k_HIF1_enters_nucleus)
+
+#Representing the HIF-1 protein leaving the nucleus
+Rule('HIF_1_leaves_nucleus',HIF1(a1=('u', 1), loc='nuc') % Importer(hif=1) >> Importer(hif=None) + HIF1(a1='u', loc='cyt'),
+      k_HIF1_leaving_nucleus)
 
 #p300 interacts with HIF-1_nucleus
 Rule('HIF1_binds_p300', HIF1(a1 = 'u', loc='nuc') + p300(hif_a1=None) | HIF1(a1 =('u', 1), loc='nuc') % p300(hif_a1=1),
@@ -295,10 +302,12 @@ Rule('HIF_2_hydroxylated_at_a1', HIF2(a1 =('u', 1), loc='cyt') % FIH(hif_a1=1) >
      k_HIF_2_hydroxylated_at_a1)
 
 #Representing the HIF-2 protein entering the nucleus
-Rule('HIF_2_binds_importer', HIF2(a1 = 'u', loc='cyt') + Importer(hif=None) | HIF2(a1=('u', 1), loc='cyt') % Importer(hif=1),
+Rule('HIF_2_binds_importer', HIF2(a1 = 'u') + Importer(hif=None) | HIF2(a1=('u', 1)) % Importer(hif=1),
      kf_HIF2_binds_importer, kr_HIF2_binds_importer)
 Rule('HIF_2_enters_nucleus',HIF2(a1=('u', 1), loc='cyt') % Importer(hif=1) >> Importer(hif=None) + HIF2(a1='u', loc='nuc'),
      k_HIF2_enters_nucleus)
+Rule('HIF_2_leaves_nucleus',HIF2(a1=('u', 1), loc='nuc') % Importer(hif=1) >> Importer(hif=None) + HIF2(a1='u', loc='cyt'),
+     k_HIF2_leaving_nucleus)
 
 #p300 interacts with HIF-2_nucleus
 Rule('HIF2_binds_p300', HIF2(a1 = 'u', loc='nuc') + p300(hif_a1=None) | HIF2(a1 =('u', 1), loc='nuc') % p300(hif_a1=1),
@@ -328,14 +337,18 @@ Rule('HIF2_making_PHD3', HIF2(a1=('u', 1), gene=2, loc='nuc') % p300(hif_a1=1) %
 
 
 # Observables
-Observable('a1_HIF', HIF1(a1 ='u', loc='nuc'))
-Observable('a1_bound_HIF', HIF1(a1=('u',1), loc='nuc') % p300(hif_a1=1))
-
+Observable('HIF1_nuc', HIF1(loc='nuc'))
+Observable('HIF1_cyt', HIF1(loc='cyt'))
+Observable('HIF2_nuc', HIF2(loc='nuc'))
+Observable('HIF2_cyt', HIF2(loc='cyt'))
+Observable('PHD1_protein', PHD1())
+Observable('PHD2_protein', PHD2())
+Observable('PHD3_protein', PHD3())
 
 
 # Simulation Commands
 
-tspan = np.linspace(0, 300 , 301)
+tspan = np.linspace(0, 50 , 301)
 sim = ScipyOdeSimulator(model, tspan, verbose=True)
 result = sim.run()
 
