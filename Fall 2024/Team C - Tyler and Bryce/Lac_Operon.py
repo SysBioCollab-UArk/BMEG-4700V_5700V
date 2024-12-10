@@ -17,7 +17,7 @@ LacZYA = True
 LacZYA_MRNA = False
 LacZ = False
 LacY = False
-LacA = Flase
+LacA = False
 Allolactose = False
 Lactose_int = False
 Lactose_ex = True
@@ -58,8 +58,9 @@ print(model.detect_cycles())
 # this is how one plots the values, delete this below
 # if matplotlib is not installed
 #
-p1 = plt.plot( model.data["B"] , 'ob-', label='B')
-p2 = plt.plot( model.data["C"] , 'sr-', label='C')
+p1 = plt.plot( model.data["LacZ"] , 'ob-', label='LacZ')
+p2 = plt.plot( model.data["LacY"] , 'sr-', label='LacY')
+p3 = plt.plot( model.data["LacA"] , 'sr-', label='LacA')
 plt.legend( loc='best')
 plt.ylim((-0.1,1.1))
 plt.show()
