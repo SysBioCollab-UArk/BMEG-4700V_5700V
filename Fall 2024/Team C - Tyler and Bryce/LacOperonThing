@@ -15,11 +15,11 @@ Allolactose = True
 LacI = True
 LacZ = False
 LacY = False
-LacZYAmRNA = False
+LacZYAmRNA = True
 
 LacZ* = LacZYAmRNA
 LacY* = LacZYAmRNA
-LacZYAmRNA* = not Glucose and not LacI
+LacZYAmRNA* = not Glucose and LactoseO
 Allolactose* = LacZ and LactoseI
 LactoseI = LacY and LactoseO
 LacI = not Allolactose
