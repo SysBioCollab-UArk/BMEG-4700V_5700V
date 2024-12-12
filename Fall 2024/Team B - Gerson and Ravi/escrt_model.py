@@ -11,7 +11,7 @@ Monomer('ESCRT_0', ['cargo', 'escrt1'])
 Monomer('ESCRT_I', ['escrt0', 'escrt2'])
 Monomer('ESCRT_II', ['escrt1', 'escrt2', 'escrt3'])
 Monomer('ESCRT_III', ['escrt2', 'escrt2', 'vesicle'])
-Monomer('vesicle', ['escrt3', 'cargo'])
+Monomer('vesicle', ['escrt3', 'cargo', 'cargo'])
 Monomer('VPS4_VTA1', ['escrt3', 'escrt3'])
 
 # Initial conditions
@@ -65,7 +65,7 @@ Rule('Vesicle_formation',
      ESCRT_II(escrt1=ANY, escrt2=1, escrt3=None) % ESCRT_II(escrt1=ANY, escrt2=1, escrt3=None) +
      ESCRT_III(escrt2=MultiState(None, None), vesicle=None) >>
      ESCRT_II(escrt1=ANY, escrt2=1, escrt3=2) % ESCRT_II(escrt1=ANY, escrt2=1, escrt3=3) %
-     ESCRT_III(escrt2=MultiState(2, 3), vesicle=4) % vesicle(escrt3=4, cargo=None), k5)
+     ESCRT_III(escrt2=MultiState(2, 3), vesicle=4) % vesicle(escrt3=4, cargo=MultiState(None, None)), k5)
 
 Parameter('k6', 1)
 Rule('Cargo_deubiquitination',
@@ -100,35 +100,31 @@ Rule('Vesicle_release',
      VPS4_VTA1(escrt3=MultiState(None, None)) + vesicle(escrt3=None), k9)
 
 # Observables
-# Observable('cargo_tot', cargo())
-# Observable('cargo_ub', cargo(state='ub'))
-Observable('free_ESCRT0', ESCRT_0(cargo=None, escrt1=None))
-Observable('cargo_ESCRT0', cargo(escrt0=ANY))
+# Observable('free_ESCRT0', ESCRT_0(cargo=None, escrt1=None))
+Observable('cargo_ESCRT0', cargo(escrt0=1) % ESCRT_0(cargo=1, escrt1=None))
 Observable('cargo_ESCRT0_ESCRT1', cargo(escrt0=1) % ESCRT_0(cargo=1, escrt1=ANY))
 Observable('cargo_ESCRT0_ESCRT1_ESCRT2',
            cargo(escrt0=1) % ESCRT_0(cargo=1, escrt1=2) % ESCRT_I(escrt0=2, escrt2=ANY))
-Observable('initial_bud', ESCRT_II(escrt2=ANY))
-Observable('ESCRT3_assembly_ub', ESCRT_III(escrt2=MultiState(ANY, ANY)) % cargo(escrt0=ANY, state='ub'))
-Observable('ESCRT3_assembly_dub', ESCRT_III(escrt2=MultiState(ANY, ANY)) % cargo(escrt0=ANY, state='x'))
-# Observable('cargo_ub', cargo(state='ub'))
-# Observable('cargo_dub', cargo(state='x'))
-Observable('Total_vesicles', vesicle())
-Observable('Free_vesicles', vesicle(escrt3=None))
-Observable('VPS4_VTA1_total', VPS4_VTA1())
+Observable('initial_bud', ESCRT_II(escrt2=ANY) % cargo(state='ub'))
+Observable('ESCRT3_assembly_cargo_ub',
+           ESCRT_III(escrt2=MultiState(ANY, ANY)) % cargo(escrt0=ANY, state='ub'))
+Observable('ESCRT3_assembly_cargo_dub',
+           ESCRT_III(escrt2=MultiState(ANY, ANY)) % cargo(escrt0=ANY, state='x'))
 Observable('neck_constriction', VPS4_VTA1(escrt3=MultiState(ANY, ANY)))
-
-Observable('DEBUG',
-           ESCRT_III(escrt2=MultiState(2, 3), vesicle=ANY) %
-           ESCRT_I(escrt0=None, escrt2=4) % ESCRT_II(escrt1=4, escrt2=1, escrt3=2) %
-           ESCRT_II(escrt1=5, escrt2=1, escrt3=3) % ESCRT_I(escrt0=None, escrt2=5))
-
+Observable('total_vesicles', vesicle())
+Observable('free_vesicles', vesicle(escrt3=None))
 
 # simulation commands
-tspan = np.linspace(0, 1, 101)
+tspan = np.linspace(0, 10, 1001)
 sim = ScipyOdeSimulator(model, tspan, verbose=True)
+
+# for i, sp in enumerate(model.species):
+#     print(i, sp)
+
 output = sim.run()
 
-plt.figure(figsize=(6.4*1.5, 4.8))
+# Plots of species at different steps along the ESCRT pathway
+plt.figure(figsize=(6.4*1.5, 4.8*1.2))
 for obs in model.observables:
     plt.plot(tspan, output.observables[obs.name], lw=2, label=obs.name)
 plt.xlabel('Time')
@@ -136,16 +132,34 @@ plt.ylabel('Concentration')
 plt.legend(loc='upper left', bbox_to_anchor=(1, 1))
 plt.tight_layout()
 
+# Plots of ubiquitinated and deubiquitinated cargo before and after vesicle formation and number of free vesicles
+plt.figure()
+plt.plot(tspan, output.observable(cargo(escrt0=1, state='ub') % ESCRT_0(cargo=1)), lw=2,
+         label='cargo_ub_bound_ESCRT')
+plt.plot(tspan, output.observable(cargo(escrt0=1, state='x') % vesicle(cargo=1)), lw=2,
+         label='cargo_x_bound_vesicle')
+plt.plot(tspan, output.observables['free_vesicles'], lw=2, label='free_vesicles')
+plt.xlabel('Time')
+plt.ylabel('Concentration')
+plt.legend(loc='best')
+plt.tight_layout()
+
+# Plot of ESCRT III concentration (goes to zero over time)
+plt.figure()
+plt.plot(tspan, output.observable(ESCRT_III()), lw=2, label='ESCRT_III')
+plt.xlabel('Time')
+plt.ylabel('Concentration')
+plt.legend(loc='best')
+plt.tight_layout()
+
+# Plots of total, deubiquitinated, and ubiquitinated cargo
+plt.figure()
+plt.plot(tspan, output.observable(cargo()), lw=2, label='cargo_total')
+plt.plot(tspan, output.observable(cargo(state='x')), lw=2, label='cargo_dUb')
+plt.plot(tspan, output.observable(cargo(state='ub')), lw=2, label='cargo_ub')
+plt.xlabel('Time')
+plt.ylabel('Concentration')
+plt.legend(loc='best')
+plt.tight_layout()
+
 plt.show()
-
-
-
-
-
-
-
-
-
-
-
-
