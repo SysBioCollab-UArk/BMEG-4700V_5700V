@@ -22,13 +22,12 @@ Allolactose = False
 Lactose_int = False
 Lactose_ex = True
 
-
 PTS* = Glucose
-AC* = Not PTS
+AC* = not PTS
 cAMP* = AC
 CAP* = cAMP
-Laci* = Not Allolactose
-LacZYA_MRNA* = CAP and lacZYA and not Laci
+Laci* = not Allolactose
+LacZYA_MRNA* = CAP and LacZYA and not Laci
 LacZ* = LacZYA_MRNA
 LacY* = LacZYA_MRNA
 LacA* = LacZYA_MRNA
@@ -60,9 +59,11 @@ print(model.detect_cycles())
 #
 p1 = plt.plot( model.data["LacZ"] , 'ob-', label='LacZ')
 p2 = plt.plot( model.data["LacY"] , 'sr-', label='LacY')
-p3 = plt.plot( model.data["LacA"] , 'sr-', label='LacA')
+p3 = plt.plot( model.data["LacA"] , '^g-', label='LacA')
 plt.legend( loc='best')
 plt.ylim((-0.1,1.1))
+plt.tight_layout()
+
 plt.show()
 
 
