@@ -20,16 +20,17 @@ Monomer('Complex_I', ['fmn', 'q'])
 Monomer('FMN', ['cI', 'e_'], {'e_': ['_0', '_1', '_2']})
 Monomer('NADH')
 Monomer('NADplus')
-Monomer('Hplus')
-Monomer('e_', ['loc'], {'loc': ['mat', 'mem']})
+Monomer('Hplus', ['loc'], {'loc': ['mat','ims']})
+#Monomer('e_', ['loc'], {'loc': ['mat', 'mem']})
 Monomer('O2')
 Monomer('O2_') # superoxide
-Monomer('Q_Complex_I', ['cI', 'e_'], {'e_': ['_0', '_1', '_2']})
-Monomer('QH2_Complex_I')
-Monomer('Q_Complex_II', ['cII', 'e_'], {'e_': ['_0', '_1', '_2']})
-Monomer('QH2_Complex_II')
+Monomer('Q',['b','e_','Hp'], {'e_': ['_0', '_1', '_2'], 'Hp': ['_0', '_1', '_2']})
+#Monomer('Q_Complex_I', ['cI', 'e_'], {'e_': ['_0', '_1', '_2']})
+#Monomer('QH2_Complex_I')
+#Monomer('Q_Complex_II', ['cII', 'e_'], {'e_': ['_0', '_1', '_2']})
+#Monomer('QH2_Complex_II')
 Monomer('Complex_II', ['fad', 'q'])
-Monomer('FAD', ['cII', 'e_'], {'e_': ['_0', '_1', '_2']})
+Monomer('FAD', ['cII', 'e_', 'Hp'], {'e_': ['_0', '_1', '_2'], 'Hp': ['_0', '_1', '_2']})
 Monomer('Succinate')
 Monomer('Fumarate')
 
@@ -42,10 +43,12 @@ Parameter('O2_0', 100)
 Parameter('CII_0', 100)
 Parameter('SUCC_0', 100)
 
-Initial(Complex_I(fmn=1, q=2) % FMN(e_='_0', cI=1) % Q_Complex_I(e_='_0', cI=2), CI_0)
+#Initial(Complex_I(fmn=1, q=2) % FMN(e_='_0', cI=1) % Q_Complex_I(e_='_0', cI=2), CI_0)
+Initial(Complex_I(fmn=1, q=2) % FMN(e_='_0', cI=1) % Q(e_='_0', b=2), CI_0)
 Initial(NADH(), NADH_0)
 Initial(O2(), O2_0)
-Initial(Complex_II(fad=1, q=2) % FAD(e_='_0', cII=1) % Q_Complex_II(e_='_0', cII=2), CII_0)
+#Initial(Complex_II(fad=1, q=2) % FAD(e_='_0', cII=1) % Q_Complex_II(e_='_0', cII=2), CII_0)
+Initial(Complex_II(fad=1, q=2) % FAD(e_='_0', cII=1) % Q(e_='_0', b=2), CII_0)
 Initial(Succinate(), SUCC_0)
 
 
@@ -64,7 +67,7 @@ Parameter('k_FAD_Q_reduc', 1)
 Parameter('k_CII_Q_QH2', 1)
 
 Rule('NADH_oxidation',
-     NADH() + FMN(e_='_0') >> NADplus() + Hplus() + FMN(e_='_2'), k_NADH_ox)
+     NADH() + FMN(e_='_0') >> NADplus() + Hplus(loc='mat') + FMN(e_='_2'), k_NADH_ox)
 
 Rule('superoxide_FMN_2_1',
      O2() + FMN(e_='_2') >> O2_() + FMN( e_='_1'), k_superox_FMN)
@@ -72,20 +75,35 @@ Rule('superoxide_FMN_2_1',
 Rule('superoxide_FMN_1_0',
      O2() + FMN(e_='_1') >> O2_() + FMN(e_='_0'), k_superox_FMN)
 
+# Rule('FMN_Q_reduction_2_0',
+#      FMN(e_='_2') + Q_Complex_I(e_='_0') >> FMN(e_='_1') + Q_Complex_I(e_='_1'), k_FMN_Q_reduc)
+#
+# Rule('FMN_Q_reduction_1_0',
+#      FMN(e_='_1') + Q_Complex_I(e_='_0') >> FMN(e_='_0') + Q_Complex_I(e_='_1'), k_FMN_Q_reduc)
+#
+# Rule('FMN_Q_reduction_2_1',
+#      FMN(e_='_2') + Q_Complex_I(e_='_1') >> FMN(e_='_1') + Q_Complex_I(e_='_2'), k_FMN_Q_reduc)
+#
+# Rule('FMN_Q_reduction_1_1',
+#      FMN(e_='_1') + Q_Complex_I(e_='_1') >> FMN(e_='_0') + Q_Complex_I(e_='_2'), k_FMN_Q_reduc)
+
 Rule('FMN_Q_reduction_2_0',
-     FMN(e_='_2') + Q_Complex_I(e_='_0') >> FMN(e_='_1') + Q_Complex_I(e_='_1'), k_FMN_Q_reduc)
+     FMN(e_='_2') % Q(e_='_0') >> FMN(e_='_1') % Q(e_='_1'), k_FMN_Q_reduc)
 
 Rule('FMN_Q_reduction_1_0',
-     FMN(e_='_1') + Q_Complex_I(e_='_0') >> FMN(e_='_0') + Q_Complex_I(e_='_1'), k_FMN_Q_reduc)
+     FMN(e_='_1') % Q(e_='_0') >> FMN(e_='_0') % Q(e_='_1'), k_FMN_Q_reduc)
 
 Rule('FMN_Q_reduction_2_1',
-     FMN(e_='_2') + Q_Complex_I(e_='_1') >> FMN(e_='_1') + Q_Complex_I(e_='_2'), k_FMN_Q_reduc)
+     FMN(e_='_2') % Q(e_='_1') >> FMN(e_='_1') % Q(e_='_2'), k_FMN_Q_reduc)
 
 Rule('FMN_Q_reduction_1_1',
-     FMN(e_='_1') + Q_Complex_I(e_='_1') >> FMN(e_='_0') + Q_Complex_I(e_='_2'), k_FMN_Q_reduc)
+     FMN(e_='_1') % Q(e_='_1') >> FMN(e_='_0') % Q(e_='_2'), k_FMN_Q_reduc)
+
+# Rule('CI_Q_reduction_QH2',
+#      Q_Complex_I(e_='_2') + Hplus() + Hplus() >> QH2_Complex_I(), k_CI_Q_QH2)
 
 Rule('CI_Q_reduction_QH2',
-     Q_Complex_I(e_='_2') + Hplus() + Hplus() >> QH2_Complex_I(), k_CI_Q_QH2)
+     FMN() % Q(e_='_2', Hp='_0') + Hplus(loc='mat') + Hplus(loc='mat') >> FMN() % Q(e_='_2', Hp='_2'), k_CI_Q_QH2)
 
 Rule('Succinate_oxidation',
      Succinate() + FAD(e_='_0') >> Fumarate() + FAD(e_='_2'), k_SUCC_ox)
@@ -136,6 +154,19 @@ Observable('QIIH2_tot', QH2_Complex_II())
 # ROS generation
 Observable('O2_tot', O2())
 Observable('SuperOx', O2_())
+
+Observable('NADplus_tot', NADplus())
+Observable('NADH_tot', NADH())
+Expression('redox_ratio', NADplus_tot/NADH_tot)
+Observable('FAD_ox', FAD(e_='_0', Hp='_0'))
+Expression('redox_ratio_lab', FAD_ox/(FAD_ox + NADH_tot))
+
+# from sympy import Piecewise
+# Parameter('thres', 10)
+# Observable('X_tot', X())
+# Expression('kf', Piecewise( (1,X_tot<thres), (0,True) ) )
+# Expression('kr', Piecewise( (1,X_tot>thres), (0,True) ) )
+# Rule('A_to_B', A() | B(), kf, kr)
 
 # Simulation commands + plotting
 
